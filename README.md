@@ -37,9 +37,9 @@ Pacman depends on the following packages:
 
 Most of these are not part of the LFS book, so download their sources manually:
 
-- libarchive: <https://www.libarchive.org/downloads/libarchive-3.3.2.tar.gz>
-- fakeroot: <http://turul.canonical.com/pool/main/f/fakeroot/fakeroot_1.22.orig.tar.bz2>
-- pacman: <https://sources.archlinux.org/other/pacman/pacman-5.0.2.tar.gz>
+- libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.3.2.tar.gz>
+- fakeroot: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/fakeroot_1.22.orig.tar.bz2>
+- pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
