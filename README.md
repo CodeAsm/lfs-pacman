@@ -1,5 +1,6 @@
-# Pacman on LFS 8.1
+# Pacman on LFS Version 20190721-systemd (Development Version)
 
+Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
 Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.  
 Licensed under the [Creative Commons Attribution-ShareAlike 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/).
 
