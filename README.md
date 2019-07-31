@@ -154,7 +154,7 @@ You may want to create a `builds` directory in your home dir. In there, you woul
 
 Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
 
-Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Arch Linux packages repo](https://www.archlinux.org/packages/core/x86_64/pacman/) to the build directory.
+Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files) to the build directory.
 
 Edit the `PKGBUILD` file:
 
