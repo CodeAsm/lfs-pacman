@@ -72,8 +72,9 @@ chmod -v 755 /tools/lib/libcap.so
 ```
 
 #### fakeroot 1.22
-
+As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin
 ./configure --prefix=/tools                 \
             --libdir=/tools/lib/libfakeroot \
             --with-ipc=sysv
