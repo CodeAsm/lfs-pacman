@@ -43,6 +43,10 @@ Most of these are not part of the LFS book, so download their sources manually:
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
+**Note:** At this point, I would recommend having TWO terminals running, one CHROOTed into $LFS and one logged in as root on the host. Some files require editing with a text editor (such as vi/vim or nano) and at this point, there is not one present in the chrooted environment. Download/save the files in the chroot environment and if necessary, edit them from the host.
+
+**Note.7.21.2019:** I unintentionally jumped back and forth from host to chroot while compiling some of these. I'll have to make a run-through once more to ensure they can all be compiled in the chroot environment.
+
 #### zlib 1.2.11
 
 ```
