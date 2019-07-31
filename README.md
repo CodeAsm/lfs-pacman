@@ -121,7 +121,7 @@ You can set your name and email address as the `PACKAGER` if you want.
 Create a new user by adding the following to `/etc/passwd`:
 
 ```
-ben:x:1000:999:Ben:/home/ben:/bin/bash
+lfs:x:1000:999:LFS:/home/lfs:/bin/bash
 ```
 
 Where 999 is the ID of the `users` group. Check `/etc/group` for the correct ID, or if `users` is not present in that file, add the following to it.
@@ -133,17 +133,17 @@ users:x:999:
 Create a home directory:
 
 ```
-mkdir -v /home/ben
-chown -Rv ben:users /home/ben
+mkdir -v /home/lfs
+chown -Rv lfs:users /home/lfs
 ```
 
 Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `ben` are set to the proper values for your system):
 
 ```
 chroot --userspec=1000:999 "$LFS" /tools/bin/env -i \
-     HOME=/home/ben     \
+     HOME=/home/lfs     \
      TERM="$TERM"       \
-     PS1='$? \u:\w \$ ' \
+     PS1='(lfs chroot) \u:\w\$ ' \
      PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin \
      /tools/bin/bash --login +h
 ```
