@@ -158,12 +158,10 @@ Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.
 
 Because we're still installing to /tools, the included PKGBUILD has had the following edits made:
 
-```
-Removed 'groups' and 'depends' sections (We're not using groups, and as far as pacman knows none of the dependencies are installed.
-Edited the 'source' section to point to local tarball and files
-Changed 'configure' prefix in the 'build' section to '/tools'
-Removed 'check' section as most of the tests will fail with our current environment
-```
+* Removed 'groups' and 'depends' sections (We're not using groups, and as far as pacman knows none of the dependencies are installed.)
+* Edited the 'source' section to point to local tarball and files
+* Changed 'configure' prefix in the 'build' section to '/tools'
+* Removed 'check' section as most of the tests will fail with our current environment
 
 Now run the following command as your non-root user from the build directory:
 
@@ -211,7 +209,7 @@ When calling any of the `PKGBUILD` functions, `makepkg` will automatically `cd` 
 This is why the first step of each function will usually be to `cd` into the directory created during the extraction of the source tarball.
 
 #### Installing files
-When installing files, you cannot install them to the system root, but instead you have to install them in `${pkgdir}`. For certain packages this is done by using `make DESTDIR=${pkgdir} install` instead of `mkae install`. Not all packages use `DESTDIR`, however. If you're not sure how those packages should be built, you can always check the [Arch Linux packages](https://www.archlinux.org/packages/) or the `PKGBUILD` files from this repo.
+When installing files, you cannot install them to the system root, but instead you have to install them in `${pkgdir}`. For certain packages this is done by using `make DESTDIR=${pkgdir} install` instead of `make install`. Not all packages use `DESTDIR`, however. If you're not sure how those packages should be built, you can always check the [Arch Linux packages](https://www.archlinux.org/packages/) or the `PKGBUILD` files from this repo.
 
 In some cases, the book will tell you to `mv` a directory. This will work while creating the package, but will cause problems when installing it. You should first create the directory with `install -vdm755 $dir_name`.
 
