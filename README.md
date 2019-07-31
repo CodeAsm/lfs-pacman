@@ -14,6 +14,14 @@ This guide is divided in five stages, the first one of which starts just before 
 - Stage 4 - Installing pacman to your final system
 - Stage 5 - Finishing the book
 
+### Disclaimer
+
+This version of "Pacman on LFS" is for a development version of LFS (v.20190721-systemd). If you are not using that version of LFS, some of the packages and instructions may be different than what is stated here. Even if you ARE using the correct version, this is a development version and the possibility of bugs and security vulnerabilities is higher than it would be with a stable version.  
+
+**Proceed with Caution**
+
+**Note.7.31.19**: As of now, I am actively working through the steps in this guide and documenting changes from the original to the development version. **DO NOT USE THIS GUIDE** unless you're ready to wander off into uncharter territory and figure out issues on your own. I will not provide and assistance if you choose to use this guide in its current state and things do not go well.
+
 ## Stage 1 - Installing pacman to your temporary toolchain
 
 This stage begins right before section **6.7. Linux-4.9.9 API Headers** of the LFS 8.1 book.
