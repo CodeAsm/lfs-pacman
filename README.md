@@ -154,25 +154,16 @@ You may want to create a `builds` directory in your home dir. In there, you woul
 
 Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
 
-Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files) to the build directory.
+Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files/pacman-5.0.2) to the build directory.
 
-Edit the `PKGBUILD` file:
-
-- Comment out the `groups` and `depends` lines. We're not using package groups, and as far as pacman knows none of the dependencies are installed.
-- Edit the `source` variable so that only the pacman source tarball (not the URL) and the three downloaded files are present.
-
-Change the `configure` call in the `build` function to:
+Because we're still installing to /tools, the included PKGBUILD has had the following edits made:
 
 ```
-./configure              
-    --prefix=/tools      \
-    --sysconfdir=/etc    \
-    --localstatedir=/var \
-    --disable-doc        \
-    --disable-shared
+Removed 'groups' and 'depends' sections (We're not using groups, and as far as pacman knows none of the dependencies are installed.
+Edited the 'source' section to point to local tarball and files
+Changed 'configure' prefix in the 'build' section to '/tools'
+Removed 'check' section as most of the tests will fail with our current environment
 ```
-
-Comment out the `check` function; the tests won't run without Python.
 
 Now run the following command as your non-root user from the build directory:
 
