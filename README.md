@@ -20,7 +20,7 @@ This version of "Pacman on LFS" is for a development version of LFS (v.20190721-
 
 **Proceed with Caution**
 
-**Note.7.31.19**: As of now, I am actively working through the steps in this guide and documenting changes from the original to the development version. **DO NOT USE THIS GUIDE** unless you're ready to wander off into uncharter territory and figure out issues on your own. I will not provide and assistance if you choose to use this guide in its current state and things do not go well.
+**Note.7.31.19**: As of now, I am actively working through the steps in this guide and documenting changes from the original to the development version. **DO NOT USE THIS GUIDE** unless you're ready to wander off into uncharted territory and figure out issues on your own. I will not provide and assistance if you choose to use this guide in its current state and things do not go well.
 
 ## Stage 1 - Installing pacman to your temporary toolchain
 
