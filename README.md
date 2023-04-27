@@ -1,7 +1,8 @@
-# Pacman on LFS Version 10.1-systemd
+# Pacman on LFS Version 11.3-systemd
 
 Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
-Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.  
+Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.
+Building on [Linux From Scratch](https://linuxfromscratch.org/lfs/view/stable-systemd/index.html)
 Licensed under the [Creative Commons Attribution-ShareAlike 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/).
 
 ## Introduction
