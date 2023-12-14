@@ -1,4 +1,4 @@
-# Pacman on LFS Version 11.3-systemd
+# Pacman on LFS Version 12.0-systemd (a.k.a Archlinux from Scratch)
 
 Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
 Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.
@@ -17,7 +17,7 @@ This guide is divided in five stages, the first one of which starts just before 
 
 ## Stage 1 - Installing pacman to your temporary toolchain
 
-This stage begins right before section **Chapter 7. Entering Chroot and Building Additional Temporary Tools** of Linux From Scratch Version 10.1-systemd.
+This stage begins right after before **7.13. Cleaning up and Saving the Temporary System**.
 
 ### Pacman dependencies
 
@@ -25,27 +25,28 @@ This stage begins right before section **Chapter 7. Entering Chroot and Building
 
 Pacman depends on the following packages:
 
-- zlib
-- libarchive
-- pkg-config
-- fakeroot, which in turn depends on libcap
+- zlib 3.3.2
+- libarchive 1.22
+- pkg-config 2.0.1 
+- fakeroot 1.22, which in turn depends on 
+- libcap 2.69 
 
-Most of these are not part of the LFS book, so download their sources manually:
+We will also need:
+
+- Vim 9.0.1677 
+
+Some of these are not part of the LFS book, so I've included them with this guide, links below. 
 
 - libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.3.2.tar.gz>
-- fakeroot: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/fakeroot_1.22.orig.tar.bz2>
+- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.2.orig.tar.gz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
-**Note:** At this point, I would recommend having TWO terminals running, one CHROOTed into $LFS and one logged in as root on the host. Some files require editing with a text editor (such as vi/vim or nano) and at this point, there is not one present in the chrooted environment. Download/save the files in the chroot environment and if necessary, edit them from the host.
-
-**Note.7.21.2019:** I unintentionally jumped back and forth from host to chroot while compiling some of these. I'll have to make a run-through once more to ensure they can all be compiled in the chroot environment.
-
 #### zlib 1.2.11
 
 ```
-./configure --prefix=/tools
+./configure --prefix=/usr
 make
 make install
 ```
@@ -53,39 +54,46 @@ make install
 #### libarchive 3.3.2
 
 ```
-./configure --prefix=/tools --without-xml2 --disable-shared
+./configure --prefix=/usr --without-xml2 --disable-shared
 make
 make install
 ```
 
-#### pkg-config 0.29.2
+#### Pkgconf 2.0.1
 
 ```
-./configure --prefix=/tools            \
-            --with-internal-glib       \
-            --disable-compile-warnings \
-            --disable-host-tool        \
-            --disable-shared           \
-            --docdir=/tools/share/doc/pkg-config-0.29.2
+./configure --prefix=/usr              \
+            --disable-static           \
+            --docdir=/usr/share/doc/pkgconf-2.0.1
 make
 make install
 ```
 
-#### libcap 2.27
+#### libcap 2.69
+
+Prevent static libraries from being installed:
 
 ```
-make
-make RAISE_SETFCAP=no lib=lib prefix=/tools install
-chmod -v 755 /tools/lib/libcap.so
+sed -i '/install -m.*STA/d' libcap/Makefile
 ```
 
-#### fakeroot 1.22
+Compile and install the package:
+
+```
+make prefix=/usr lib=lib
+make test
+make prefix=/usr lib=lib install
+```
+
+
+#### fakeroot 1.32.2
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin
-./configure --prefix=/tools                 \
-            --libdir=/tools/lib/libfakeroot \
-            --with-ipc=sysv
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib/libfakeroot \
+    --disable-static \
+    --with-ipc=sysv
+
 make
 make install
 ```
@@ -93,7 +101,7 @@ make install
 ### Pacman 5.0.2
 
 ```
-./configure --prefix=/tools   \
+./configure --prefix=/usr   \
             --disable-doc     \
             --disable-shared  \
             --sysconfdir=/etc \
@@ -110,6 +118,19 @@ CHOST="x86_64-pc-linux-gnu"
 ```
 
 You can set your name and email address as the `PACKAGER` if you want.
+
+### Vim (or any text editor)
+
+We wont bother testing VIM as this is just to our temporary tools and it'll be recompiled later.
+
+```
+echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+./configure --prefix=/usr
+make
+make install
+
+```
+
 
 ### Setting up to build packages with pacman
 
@@ -135,12 +156,12 @@ chown -Rv lfs:users /home/lfs
 Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `ben` are set to the proper values for your system):
 
 ```
-chroot --userspec=1000:999 "$LFS" /tools/bin/env -i \
+chroot --userspec=1000:999 "$LFS" /bin/env -i \
      HOME=/home/lfs     \
      TERM="$TERM"       \
      PS1='(lfs chroot) \u:\w\$ ' \
-     PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin \
-     /tools/bin/bash --login +h
+     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+     /bin/bash --login +h
 ```
 
 You may want to create a `builds` directory in your home dir. In there, you would then create a directory for each package you're building.
@@ -151,11 +172,10 @@ Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
 
 Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files/pacman-5.0.2) to the build directory.
 
-Because we're still installing to /tools, the included PKGBUILD has had the following edits made:
+The included PKGBUILD has had the following edits made:
 
 * Removed 'groups' and 'depends' sections (We're not using groups, and as far as pacman knows none of the dependencies are installed.)
 * Edited the 'source' section to point to local tarball and files
-* Changed 'configure' prefix in the 'build' section to '/tools'
 * Removed 'check' section as most of the tests will fail with our current environment
 
 Now run the following command as your non-root user from the build directory:
@@ -169,10 +189,12 @@ We're skipping the checksums because we don't have OpenSSL installed yet.
 If all goes well, this should have created a file that you can now install as follows, as root this time:
 
 ```
-pacman -U pacman-5.0.2-2-x86_64.pkg.tar.gz
+pacman -U --force pacman-5.0.2-2-x86_64.pkg.tar.gz
 ```
 
-## Stage 3 - Installing packages of chapter six of the LFS book
+`--force` is required as these files already exist and we're intentionally reinstalling overtop of them.
+
+## Stage 3 - Installing packages of chapter eight of the LFS book
 
 Now we will continue with the rest of the book, but instead of building and installing the packages manually, we will create packages and then use pacman to install them.
 
