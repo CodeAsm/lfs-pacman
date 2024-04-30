@@ -27,7 +27,7 @@ Pacman depends on the following packages:
 
 - zlib 1.2.11
 - libarchive 3.3.2
-- pkg-config 0.29.2 
+- pkgconf 2.0.1 
 - fakeroot 1.23, which in turn depends on 
 - libcap 2.69 
 
