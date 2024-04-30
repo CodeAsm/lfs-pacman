@@ -26,19 +26,19 @@ This stage begins right after before **7.13. Cleaning up and Saving the Temporar
 
 Pacman depends on the following packages:
 
-- zlib 1.2.11
-- libarchive 3.3.2
-- pkgconf 2.0.1 
+- zlib 1.3.1
+- libarchive 3.7.2
+- pkgconf 2.1.1 
 - fakeroot 1.23, which in turn depends on 
 - libcap 2.69 
 
 We will also need:
 
-- Vim 9.0.1677 
+- Vim 9.1.0041 
 
 Some of these are not part of the LFS book, so I've included them with this guide, links below. 
 
-- libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.3.2.tar.gz>
+- libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.7.2.tar.gz>
 - fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.23.orig.tar.xz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
@@ -52,7 +52,7 @@ make
 make install
 ```
 
-#### libarchive 3.3.2
+#### libarchive 3.7.2
 
 ```
 ./configure --prefix=/usr --without-xml2 --disable-shared
@@ -60,12 +60,12 @@ make
 make install
 ```
 
-#### Pkgconf 2.0.1
+#### Pkgconf 2.1.1
 
 ```
 ./configure --prefix=/usr              \
             --disable-static           \
-            --docdir=/usr/share/doc/pkgconf-2.0.1
+            --docdir=/usr/share/doc/pkgconf-2.1.1
 make
 make install
 ```
@@ -240,7 +240,7 @@ Pacman will execute the functions in the `.install` file at the end of the insta
 
 Some packages require additional steps besides simply converting the LFS instructions into a  `PKGBUILD`. These steps are documented here.
 
-#### 6.9. Glibc-2.26
+#### 6.9. Glibc-2.39
 
 The book wants you to create some symlinks; I did that manually, as I felt it would be out of place in the package.
 
@@ -250,45 +250,45 @@ The tzdata part of glibc requires `zic` to be installed to the system, which mea
 
 I did these steps manually. It didn't feel suitable to (ab)use `makepkg`/`pacman` for this purpose.
 
-#### 6.15. Bc-1.07.1
+#### 6.15. Bc-6.7.5
 
 The book wants you to create symlinks for libncurses. I did this manually before building the package.
 
-#### 6.20. GCC-7.2.0
+#### 6.20. GCC-13.2.0
 
 Before building the package, increase the stack size: `ulimit -s 32768`.
 
 I had to use `--force` when installing this package, since some libraries already existed on the system.
 
-#### 6.28. Shadow-4.5
+#### 6.28. Shadow-4.14.5
 
 I ran `passwd` manually.
 
-#### 6.34. Bash-4.4
+#### 6.4. Bash-5.2.21
 
 When creating the package, `makepkg` told me that "Package contains reference to $srcdir". Using `grep -R "$(pwd)/src" pkg/`, I found out that Bash installs `Makefile.inc` to `/usr/lib/bash/`, which contains a reference to the build directory. On an existing Arch Linux installation, `/usr/lib/bash/Makefile.inc` also contained a reference to a (non-existing) build directory, so I assume this is benign.
 
-Use `--force` to install this package, since `/bin/bash` was created as part of **6.6. Creating Essential Files and Symlinks**.
+Use `--force` to install this package, since `/bin/bash` was created as part of **7.6. Creating Essential Files and Symlinks**.
 
 I then re-chrooted, using `/bin/bash` instead of `/tools/bin/bash`.
 
-#### 6.40. Perl-5.26.0
+#### 7.9. Perl-5.38.2
 
 The LFS book tells you to create `/etc/hosts`. I've chosen to do this manually, rather than to have the Perl package install this file. It doesn't sound right that Perl should own this file. For reference, in Arch Linux, the hosts file is owned by the `filesystem` package, which contains the base Arch Linux files, so it makes sense that this is created manually in the case of LFS.
 
 Use `--force` to install this package, since `/usr/bin/perl` was created as part of **6.6. Creating Essential Files and Symlinks**.
 
-#### 6.50. Coreutils-8.27
+#### 6.5. Coreutils-9.4
 
 For some reason, doing the in place `sed` (`sed -i`) on `chroot.8` resulted in the file having 000 permissions. I replaced it with a regular `sed`, redirecting the result to a new file, then using `install` to copy the file to its destination.
 
 Use `--force` to install this package, since a number of files already exist (amongst others `cat`, `dd`, `echo`) in `/bin` (as symlinks to `/tools`). These were added in **6.6. Creating Essential Files and Symlinks**.
 
-#### 6.53. Findutils-4.6.0
+#### 6.8. Findutils-4.9.0
 
 As with coreutils, using in place `sed` set the permissions to 000, so I used the same workaround here.
 
-#### 6.63. Sysklogd-1.5.1
+#### 6.63. Sysklogd-1.5.1 << ??? >>
 
 Sysklogd's makefile doesn't support specifying a destination directory when installing (`make DESTDIR=/path`). I've included a patch that adds this.
 
