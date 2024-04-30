@@ -25,10 +25,10 @@ This stage begins right after before **7.13. Cleaning up and Saving the Temporar
 
 Pacman depends on the following packages:
 
-- zlib 3.3.2
-- libarchive 1.22
-- pkg-config 2.0.1 
-- fakeroot 1.22, which in turn depends on 
+- zlib 1.2.11
+- libarchive 3.3.2
+- pkg-config 0.29.2 
+- fakeroot 1.23, which in turn depends on 
 - libcap 2.69 
 
 We will also need:
@@ -38,7 +38,7 @@ We will also need:
 Some of these are not part of the LFS book, so I've included them with this guide, links below. 
 
 - libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.3.2.tar.gz>
-- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.2.orig.tar.gz>
+- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.23.orig.tar.xz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
@@ -86,7 +86,7 @@ make prefix=/usr lib=lib install
 ```
 
 
-#### fakeroot 1.32.2
+#### fakeroot 1.23
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
   ./configure --prefix=/usr \
