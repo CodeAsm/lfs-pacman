@@ -18,7 +18,8 @@ This guide is divided in five stages, the first one of which starts just before 
 
 ## Stage 1 - Installing pacman to your temporary toolchain
 
-This stage begins right after before **7.13. Cleaning up and Saving the Temporary System**.
+This stage begins right before **7.13. Cleaning up and Saving the Temporary System**,
+after completing **7.12. Util-linux-2.39.3**.
 
 ### Pacman dependencies
 
