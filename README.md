@@ -43,7 +43,7 @@ Some of these are not part of the LFS book, so download their sources manually:
 - fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.23.orig.tar.xz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
-To download all of the packages by using wget-list-pacman as an input to the wget command, use: 
+To download all of the packages (including libarchive rom BLFS) by using wget-list-pacman as an input to the wget command, use: 
 ```sh
 wget --input-file=wget-list-pacman --continue --directory-prefix=$LFS/sources
 ```
