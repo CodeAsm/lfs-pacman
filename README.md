@@ -37,11 +37,24 @@ We will also need:
 
 - Vim 9.1.0041 
 
-Some of these are not part of the LFS book, so I've included them with this guide, links below. 
+Some of these are not part of the LFS book, so download their sources manually:
 
 - libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.7.2.tar.gz>
 - fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.23.orig.tar.xz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
+
+To download all of the packages by using wget-list-pacman as an input to the wget command, use: 
+```sh
+wget --input-file=wget-list-pacman --continue --directory-prefix=$LFS/sources
+```
+Additionally, there is a separate file, md5sums, which can be used to verify that all the correct packages are available before proceeding. Place that file in $LFS/sources and run: 
+
+```sh
+pushd $LFS/sources
+  md5sum -c md5sums-pacman
+popd
+```
+ This check can be used after retrieving the needed files with any of the methods listed above.
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
