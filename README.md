@@ -12,7 +12,7 @@ This guide is divided in five stages, the first one of which starts just before 
 
 - Stage 1 - Installing pacman to your temporary toolchain
 - Stage 2 - Installing pacman with pacman
-- Stage 3 - Installing packages of chapter six of the LFS book
+- Stage 3 - Installing packages of chapter eight of the LFS book
 - Stage 4 - Installing pacman to your final system
 - Stage 5 - Finishing the book
 
