@@ -106,19 +106,11 @@ make prefix=/usr lib=lib install
 
 #### libtool 2.4.7
 
- Prepare Libtool for compilation:
+ Configure and Build Libtool:
 
 ```
 ./configure --prefix=/usr
-```
-
-Compile the package:
-```
 make
-``` 
-Install the package:
-
-```
 make install
 ```
 Remove a useless static library:
@@ -128,16 +120,10 @@ rm -fv /usr/lib/libltdl.a
 
 #### autoconf 2.72 
 
- Prepare Autoconf for compilation:
+Now do Autoconf:
 ```
 ./configure --prefix=/usr
-```
-Compile the package:
-```
 make
-```
-Install the package:
-```
 make install
 ```
 
@@ -147,12 +133,9 @@ make install
 ```
 ./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.5
 ```
-Compile the package:
+Compile and install the package:
 ```
 make
-```
-Install the package:
-```
 make install
 ```
 #### fakeroot 1.25.3
