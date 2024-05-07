@@ -29,9 +29,13 @@ Pacman depends on the following packages:
 
 - zlib 1.3.1
 - libarchive 3.7.2
+    - OpenSSL 3.2.1 (libcryto)
 - pkgconf 2.1.1 
-- fakeroot 1.23, which in turn depends on 
-- libcap 2.69 
+- fakeroot 1.25.3, which in turn depends on 
+    - libcap 2.69
+    - libtoolize 2.4.7
+    - autoconf 2.72 
+    - automake 1.16.5 
 
 We will also need:
 
@@ -40,7 +44,7 @@ We will also need:
 Some of these are not part of the LFS book, so download their sources manually:
 
 - libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.7.2.tar.gz>
-- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.23.orig.tar.xz>
+- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.25.3.orig.tar.xz>
 - pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
 
 To download all of the packages (including libarchive rom BLFS) by using wget-list-pacman as an input to the wget command, use: 
@@ -100,10 +104,69 @@ make test
 make prefix=/usr lib=lib install
 ```
 
+#### libtool 2.4.7
 
-#### fakeroot 1.23
+ Prepare Libtool for compilation:
+
+```
+./configure --prefix=/usr
+```
+
+Compile the package:
+```
+make
+``` 
+Install the package:
+
+```
+make install
+```
+Remove a useless static library:
+```
+rm -fv /usr/lib/libltdl.a
+```
+
+#### autoconf 2.72 
+
+ Prepare Autoconf for compilation:
+```
+./configure --prefix=/usr
+```
+Compile the package:
+```
+make
+```
+Install the package:
+```
+make install
+```
+
+#### automake 1.16.5 
+
+ Prepare Automake for compilation:
+```
+./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.5
+```
+Compile the package:
+```
+make
+```
+Install the package:
+```
+make install
+```
+#### fakeroot 1.25.3
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
+patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-1.patch
+patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-2.patch
+patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-3.patch
+
+# Don't install docs
+sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am
+
+./bootstrap
+
   ./configure --prefix=/usr \
     --libdir=/usr/lib/libfakeroot \
     --disable-static \
@@ -111,12 +174,28 @@ As part of its installation, fakeroot calls ldconfig, which is located in /tools
 
 make
 make install
+
+install -dm0755 "/etc/ld.so.conf.d/"
+echo '/usr/lib/libfakeroot' > "/etc/ld.so.conf.d/fakeroot.conf"
+```
+### OpenSSL 3.2.1 
+
+```
+./config --prefix=/usr         \
+         --openssldir=/etc/ssl \
+         --libdir=lib          \
+         shared                \
+         zlib-dynamic
+make
+sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+make MANSUFFIX=ssl install
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.2.1
 ```
 
 ### Pacman 5.0.2
 
 ```
-./configure --prefix=/usr   \
+PKG_CONFIG=pkgconf ./configure --prefix=/usr   \
             --disable-doc     \
             --disable-shared  \
             --sysconfdir=/etc \
@@ -168,7 +247,7 @@ mkdir -v /home/lfs
 chown -Rv lfs:users /home/lfs
 ```
 
-Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `ben` are set to the proper values for your system):
+Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `lfs` are set to the proper values for your system):
 
 ```
 chroot --userspec=1000:999 "$LFS" /bin/env -i \
