@@ -13,7 +13,7 @@ source=(${pkgname}-${pkgver}.tar.gz
 build() {
     cd "$pkgname-$pkgver"
 
-    ./configure              \
+    PKG_CONFIG=pkgconf ./configure              \
 	--prefix=/tools        \
 	--sysconfdir=/etc    \
 	--localstatedir=/var \

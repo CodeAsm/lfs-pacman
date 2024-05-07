@@ -271,6 +271,7 @@ The included PKGBUILD has had the following edits made:
 * Removed 'groups' and 'depends' sections (We're not using groups, and as far as pacman knows none of the dependencies are installed.)
 * Edited the 'source' section to point to local tarball and files
 * Removed 'check' section as most of the tests will fail with our current environment
+* Added the PKG_CONFIG=pkgconf flag to find the newer pkg config tool
 
 Now run the following command as your non-root user from the build directory:
 
