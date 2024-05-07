@@ -9,6 +9,10 @@ backup=(etc/pacman.conf etc/makepkg.conf)
 source=(${pkgname}-${pkgver}.tar.gz
         pacman.conf.x86_64
         makepkg.conf)
+sha256sums=(dfd36086ad68564bcd977f4a1fafe51dd328acd4a95093ac4bf1249be9c41f0e
+    95b3b2416402059cf6acf3e046082e7ce261e2b88629231dbf579a4200d8a63b
+    6066d67d818ee36760bf121c76d5019130f7875b3e5ed179b319b810a3a9685b
+)
 
 build() {
     cd "$pkgname-$pkgver"

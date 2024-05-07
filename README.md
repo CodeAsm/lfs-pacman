@@ -276,18 +276,20 @@ The included PKGBUILD has had the following edits made:
 Now run the following command as your non-root user from the build directory:
 
 ```
-makepkg --skipchecksums
+makepkg
 ```
 
-We're skipping the checksums because we don't have OpenSSL installed yet.
-
-If all goes well, this should have created a file that you can now install as follows, as root this time:
+If all goes well, this should have created a file that you can now install as follows, as root this time (thus, logout, use the chroot command like you would in 7.4. Entering the Chroot Environment):
 
 ```
-pacman -U --force pacman-5.0.2-2-x86_64.pkg.tar.gz
+pacman -U pacman-5.0.2-2-x86_64.pkg.tar.gz
 ```
 
-`--force` is required as these files already exist and we're intentionally reinstalling overtop of them.
+Before starting with stage 3, you left the LFS book at **7.13. Cleaning up and Saving the Temporary System**
+Continue from there
+ - backup your tools
+
+Come back after you have read **8.2. Package Management**
 
 ## Stage 3 - Installing packages of chapter eight of the LFS book
 
