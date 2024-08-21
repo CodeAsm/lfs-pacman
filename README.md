@@ -20,6 +20,7 @@ This guide is divided in five stages, the first one of which starts just before 
 
 This stage begins right before **7.13. Cleaning up and Saving the Temporary System**,
 after completing **7.12. Util-linux-2.39.3**.
+So yes, youve completed the previous chapters of the LFS book.
 
 ### Pacman dependencies
 
