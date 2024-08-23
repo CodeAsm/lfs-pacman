@@ -151,10 +151,10 @@ sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am
 
 ./bootstrap
 
-  ./configure --prefix=/usr \
-    --libdir=/usr/lib/libfakeroot \
-    --disable-static \
-    --with-ipc=sysv
+./configure --prefix=/usr \
+  --libdir=/usr/lib/libfakeroot \
+  --disable-static \
+  --with-ipc=sysv
 
 make
 make install
