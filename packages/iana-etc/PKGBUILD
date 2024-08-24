@@ -1,18 +1,14 @@
 pkgname=iana-etc
-pkgver=2.30
+pkgver=20240125
 pkgrel=1
 pkgdesc="/etc/protocols and /etc/services provided by IANA"
 arch=('x86_64')
 url="http://www.iana.org/protocols"
 license=('custom:none')
-source=(${pkgname}-${pkgver}.tar.bz2)
-
-build() {
-    cd "${pkgname}-${pkgver}"
-    make
-}
+source=(${pkgname}-${pkgver}.tar.gz)
 
 package() {
     cd "${pkgname}-${pkgver}"
-    make DESTDIR=${pkgdir} install
+    mkdir -p ${pkgdir}/etc
+    cp services protocols ${pkgdir}/etc
 }
