@@ -244,6 +244,13 @@ chroot --userspec=1000:999 "$LFS" /bin/env -i \
 
 You may want to create a `builds` directory in your home dir. In there, you would then create a directory for each package you're building.
 
+From the chroot environment, create a builds directory:
+
+```
+cd /home/lfs
+mkdir -v builds
+```
+
 ## Stage 2 - Installing pacman with pacman
 
 Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
