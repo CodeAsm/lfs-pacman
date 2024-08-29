@@ -1,10 +1,16 @@
-# Pacman on LFS Version 12.1-systemd (a.k.a "Archlinux from Scratch")
+# Pacman on LFS Version 12.1-systemd
 
-  Forked from "(https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton  
+  Forked from "[Pacman on LFS Version 12.0-systemd](https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton wich in turn is  
   Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
   Added changes and PKGBUILD files from "[LFS-11.2-systemd-with-EFI-and-pacman](https://github.com/ShiroiBara/LFS-11.2-systemd-with-EFI-and-pacman)"  
   Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.
   Building on [Linux From Scratch](https://linuxfromscratch.org/lfs/view/stable-systemd/index.html)
+
+"Archlinux from Scratch" but without the Arch repo's unless you add them.
+
+I hope you know what Linux from Scratch is, or (GNU, lol) Linux at all. if so, this tries to add arch linux their package manager to Linux from Scratch. by building everything ourselves, and then installing it. But not using Arch or its friends repositories of precompiled software. Because that would defeat the purpose of LFS and slowly replacing LFS with basicly what Arch makes Arch.
+
+So we basicly build LFS, but make every package, a installable arch package. You could then in theory, make your own package repo and host these (beyound the scope of this repo). To start, get familiar with the LFS book, prefferably youve completed the book atleast once and got it working
 
 Licensed under the [Creative Commons Attribution-ShareAlike 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/).
 
