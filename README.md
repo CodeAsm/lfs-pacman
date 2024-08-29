@@ -1,9 +1,11 @@
-# Pacman on LFS Version 12.1-systemd (a.k.a Archlinux from Scratch)
+# Pacman on LFS Version 12.1-systemd (a.k.a "Archlinux from Scratch")
 
-Forked from "(https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton
-Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
-Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.
-Building on [Linux From Scratch](https://linuxfromscratch.org/lfs/view/stable-systemd/index.html)
+  Forked from "(https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton  
+  Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
+  Added changes and PKGBUILD files from "[LFS-11.2-systemd-with-EFI-and-pacman](https://github.com/ShiroiBara/LFS-11.2-systemd-with-EFI-and-pacman)"  
+  Based on [the guide writen by James Kimball](http://lists.linuxfromscratch.org/pipermail/hints/2013-March/003304.html) in 2013.
+  Building on [Linux From Scratch](https://linuxfromscratch.org/lfs/view/stable-systemd/index.html)
+
 Licensed under the [Creative Commons Attribution-ShareAlike 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/).
 
 ## Introduction
