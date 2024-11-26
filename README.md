@@ -28,35 +28,49 @@ This guide is divided in five stages, the first one of which starts just before 
 
 This stage begins right before **7.13. Cleaning up and Saving the Temporary System**,
 after completing **7.12. Util-linux-2.39.3**.
-So yes, youve completed the previous chapters of the LFS book.
+So yes, youve completed the previous chapters of the LFS book. If not, start reading :D
 
-### Pacman dependencies
+When you finished 7.12, its best to grab these extra wget download list and md5 checksum check.
+adapt to what feels right. Also, make sure $LFS points to your LFS target mount point:
 
-**Note** We will be installing an old version of Pacman to start, as 6.0 removed support for autotools building.
+```sh
+git clone git@github.com:CodeAsm/lfs-pacman.git $LFS/sources/
+rm -rf $LFS/sources/pacman/.git 
+mv README.md LICENSE $LFS/sources/packages
+```
+Here we delete the .git directory. readme(this very document your reading) and the license under which these files are released.
 
-Pacman depends on the following packages:
+### Pacman and makepkg dependencies
 
-- zlib 1.3.1
-- libarchive 3.7.2
-    - OpenSSL 3.2.1 (libcryto)
-- pkgconf 2.1.1 
-- fakeroot 1.25.3, which in turn depends on 
-    - libcap 2.69
-    - libtoolize 2.4.7
-    - autoconf 2.72 
-    - automake 1.16.5 
+Pacman and to use makepkg later, they depend on the following packages:
+
+- Python 3.12.5
+    - zlib 1.3.1
+    - meson 1.5.1
+- ninja 1.12.1
+- util-linux for getopt 2.40.2
+- shadow for su 4.16.0
+- fakeroot 1.36 
+    - libcap 2.70
+- libarchive 3.7.4
+    - OpenSSL 3.3.1 (libcryto)
+- pkgconf 2.3.0 (and not pkg-config, as dev has stalled)
+- pacman 7.0.0
 
 We will also need:
 
-- Vim 9.1.0041 
+- Vim 9.1.0660 
 
 Some of these are not part of the LFS book, so download their sources manually:
 
-- libarchive: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/libarchive-3.7.2.tar.gz>
-- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.25.3.orig.tar.xz>
-- pacman: <https://github.com/mssxtn/lfs-pacman/raw/master/install-files/pacman-5.0.2.tar.gz>
+From the BLFS book:
+- libarchive: <https://github.com/libarchive/libarchive/releases/download/v3.7.4/libarchive-3.7.4.tar.xz>
 
-To download all of the packages (including libarchive rom BLFS) by using wget-list-pacman as an input to the wget command, use: 
+Outside of the LFS ecosystem:
+- fakeroot: <https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.36.orig.tar.gz>
+- pacman: <https://gitlab.archlinux.org/pacman/pacman/-/releases/v7.0.0/downloads/pacman-7.0.0.tar.xz>
+
+To download all of the packages (including libarchive from BLFS) by using wget-list-pacman as an input to the wget command, use: 
 ```sh
 wget --input-file=wget-list-pacman --continue --directory-prefix=$LFS/sources
 ```
