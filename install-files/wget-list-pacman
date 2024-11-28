@@ -1,3 +1,6 @@
 https://github.com/libarchive/libarchive/releases/download/v3.7.2/libarchive-3.7.2.tar.xz
 https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.36.orig.tar.gz
 https://sources.archlinux.org/other/pacman/pacman-6.0.2.tar.xz
+https://raw.githubusercontent.com/archlinux/svntogit-packages/85c273376b31de33a2eac07348d605125a0f143b/trunk/fakeroot-1.25.3-glibc-2.33-fix-1.patch
+https://raw.githubusercontent.com/archlinux/svntogit-packages/85c273376b31de33a2eac07348d605125a0f143b/trunk/fakeroot-1.25.3-glibc-2.33-fix-2.patch
+https://raw.githubusercontent.com/archlinux/svntogit-packages/85c273376b31de33a2eac07348d605125a0f143b/trunk/fakeroot-1.25.3-glibc-2.33-fix-3.patch
