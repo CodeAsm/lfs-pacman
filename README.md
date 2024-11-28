@@ -38,6 +38,10 @@ Probably good to do outside chroot, grab the pacman install scripts:
 ```sh
  git clone https://github.com/CodeAsm/lfs-pacman $LFS/sources/pacman
 ```
+the work in progress branch:
+```sh
+git clone --branch LFS-12.2 --single-branch https://github.com/CodeAsm/lfs-pacman $LFS/sources/pacman
+```
 
 ### Pacman and makepkg dependencies
 
@@ -71,16 +75,16 @@ Outside of the LFS ecosystem:
 
 To download all of the packages (including libarchive from BLFS) by using wget-list-pacman as an input to the wget command, use: 
 ```sh
-wget --input-file=wget-list-pacman --continue --directory-prefix=$LFS/sources
+wget --input-file=$LFS/sources/pacman/install-files/wget-list-pacman --continue --directory-prefix=$LFS/sources
 ```
 Additionally, there is a separate file, md5sums, which can be used to verify that all the correct packages are available before proceeding. Place that file in $LFS/sources and run: 
 
 ```sh
 pushd $LFS/sources
-  md5sum -c md5sums-pacman
+  md5sum -c $LFS/sources/pacman/install-files/md5sums-pacman
 popd
 ```
- This check can be used after retrieving the needed files with any of the methods listed above.
+This check can be used after retrieving the needed files with any of the methods listed above.
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
