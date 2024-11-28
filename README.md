@@ -1,4 +1,4 @@
-# Pacman on LFS Version 12.1-systemd
+# Pacman on LFS Version 12.2-systemd
 
   Forked from "[Pacman on LFS Version 12.0-systemd](https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton wich in turn is  
   Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
@@ -30,15 +30,14 @@ This stage begins right before **7.13. Cleaning up and Saving the Temporary Syst
 after completing **7.12. Util-linux-2.39.3**.
 So yes, youve completed the previous chapters of the LFS book. If not, start reading :D
 
-When you finished 7.12, its best to grab these extra wget download list and md5 checksum check.
-adapt to what feels right. Also, make sure $LFS points to your LFS target mount point:
+When you finished 7.12, its best to grab these extra wget download list and md5 checksum check. 
+adapt to what feels right. Also, make sure $LFS points to your LFS target mount point when doing these steps. And you could make a backup either or both before and or after adding pacman, now be the time to decide.
+
+Probably good to do outside chroot, grab the pacman install scripts:
 
 ```sh
-git clone git@github.com:CodeAsm/lfs-pacman.git $LFS/sources/
-rm -rf $LFS/sources/pacman/.git 
-mv README.md LICENSE $LFS/sources/packages
+ git clone https://github.com/CodeAsm/lfs-pacman $LFS/sources/pacman
 ```
-Here we delete the .git directory. readme(this very document your reading) and the license under which these files are released.
 
 ### Pacman and makepkg dependencies
 
