@@ -166,12 +166,10 @@ Compile and install the package:
 make
 make install
 ```
-#### fakeroot 1.25.3
+#### fakeroot 1.36
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
-patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-1.patch
-patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-2.patch
-patch -p1 -i ../fakeroot-1.25.3-glibc-2.33-fix-3.patch
+patch -p1 -i ../0001-Cast-uint8_t-pointers.patch
 
 # Don't install docs
 sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am

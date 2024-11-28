@@ -1,6 +1,4 @@
 4f4ef6a17c7b0b484aa2c95aa6deefac libarchive-3.7.2.tar.xz
 557d78e61051de852c49822d4ccc61bc fakeroot_1.36.orig.tar.gz
 f2c7e82cc5483a2c90f228a0393f5526 pacman-6.0.2.tar.xz
-89df9b3b89357fc7dae8b3d2fdbc0863 fakeroot-1.25.3-glibc-2.33-fix-1.patch
-880c0cbd5bc8a21bfa016aa5ad9fabec fakeroot-1.25.3-glibc-2.33-fix-2.patch
-b6e543278d2da6a4984e5c6a1f481bd8 fakeroot-1.25.3-glibc-2.33-fix-3.patch
+6bc4e9c20c2efc6de07ca7d05d9d2754 0001-Cast-uint8_t-pointers.patch
