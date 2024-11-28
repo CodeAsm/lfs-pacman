@@ -88,6 +88,8 @@ This check can be used after retrieving the needed files with any of the methods
 
 Build these packages using the following commands. Just like the LFS book, these commands assume you've extracted the relevant sources and `cd`'d into the resulting directory.
 
+You need to be inside the chroot environment, if you quit (to backup/restore) and have the virtual kernel file system mounted. (see [Section 7.4, “Entering the Chroot Environment”](https://linuxfromscratch.org/lfs/view/stable-systemd/chapter07/chroot.html)) before continuing. 
+
 #### zlib 1.2.11
 
 ```
