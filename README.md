@@ -1,4 +1,4 @@
-# Pacman on LFS Version 12.2-systemd
+# Pacman 7.0.0 on LFS Version 12.2-systemd
 
   Forked from "[Pacman on LFS Version 12.0-systemd](https://github.com/wsdmatty/lfs-pacman)" By Matthew Sexton wich in turn is  
   Forked from "[Pacman on LFS 8.1](https://github.com/benvd/lfs-pacman)" By Ben Van Daele.  
@@ -60,7 +60,7 @@ Pacman and to use makepkg later, they depend on the following packages:
 - pkgconf 2.3.0 (and not pkg-config, as dev has stalled)
 - pacman 7.0.0
 
-We will also need:
+We will also need (or nano):
 
 - Vim 9.1.0660 
 
@@ -90,33 +90,80 @@ Build these packages using the following commands. Just like the LFS book, these
 
 You need to be inside the chroot environment, if you quit (to backup/restore) and have the virtual kernel file system mounted. (see [Section 7.4, “Entering the Chroot Environment”](https://linuxfromscratch.org/lfs/view/stable-systemd/chapter07/chroot.html)) before continuing. 
 
-#### zlib 1.2.11
+#### zlib 1.3.1
 
 ```
 ./configure --prefix=/usr
 make
 make install
+rm -fv /usr/lib/libz.a
 ```
-
-#### libarchive 3.7.2
+### OpenSSL 3.3.1 
 
 ```
-./configure --prefix=/usr --without-xml2 --disable-shared
+./config --prefix=/usr         \
+         --openssldir=/etc/ssl \
+         --libdir=lib          \
+         shared                \
+         zlib-dynamic
+make
+sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+make MANSUFFIX=ssl install
+```
+check if the following is needed?
+```sh
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.3.1
+```
+### Python 3.12.5 with zlib
+
+```sh
+./configure --prefix=/usr   \
+            --enable-shared \
+            --without-ensurepip
 make
 make install
 ```
+**Note:** This is temporary python builded with same commands as LFS book chapter 7.11. Python-3.10.2. All messages about missing libararies and headers could be safely ignored because you only need zlib module. Even openssl has already build, it's not require for this version of python, if desired you could build openssl after python.
 
-#### Pkgconf 2.1.1
 
+### ninja 1.12.1
+
+```sh
+python3 configure.py --bootstrap
+install -vm755 ninja /usr/bin/
+install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninja
+install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 ```
-./configure --prefix=/usr              \
-            --disable-static           \
-            --docdir=/usr/share/doc/pkgconf-2.1.1
+### Meson 1.5.1 as pyz
+
+**Note:** Since python was build without setuptools module you need put meson in single executable ziped file what will be stored in /source directory. This file will be used by python later to build pacman
+
+```sh
+./packaging/create_zipapp.py --outfile meson.pyz --interpreter '/usr/bin/python3' .
+cp meson.pyz ..
+```
+
+### util-linux 2.40.2 for getopt
+
+```sh
+mkdir -pv /var/lib/hwclock
+./configure ADJTIME_PATH=/var/lib/hwclock/adjtime    \
+            --libdir=/usr/lib    \
+            --docdir=/usr/share/doc/util-linux-2.38.1 \
+            --disable-chfn-chsh  \
+            --disable-login      \
+            --disable-nologin    \
+            --disable-su         \
+            --disable-setpriv    \
+            --disable-runuser    \
+            --disable-pylibmount \
+            --disable-static     \
+            --without-python     \
+            runstatedir=/run
 make
 make install
 ```
-
-#### libcap 2.69
+### libcap 2.70
 
 Prevent static libraries from being installed:
 
@@ -132,47 +179,64 @@ make test
 make prefix=/usr lib=lib install
 ```
 
-#### libtool 2.4.7
+### shadow 4.16.0 for su
 
- Configure and Build Libtool:
+```sh
+sed -i 's/groups$(EXEEXT) //' src/Makefile.in
+find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
+find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
+find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
+./configure --sysconfdir=/etc \
+            --disable-static
+make
+cp ./src/su /usr/bin/
 
 ```
-./configure --prefix=/usr
+### libarchive 3.7.4
+
+TODO: 
+```sh
+sed '/linux\/fs\.h/d' -i libarchive/archive_read_disk_posix.c
+./configure --prefix=/usr --disable-static
 make
 make install
 ```
-Remove a useless static library:
-```
-rm -fv /usr/lib/libltdl.a
-```
+or 
 
-#### autoconf 2.72 
-
-Now do Autoconf:
 ```
-./configure --prefix=/usr
+./configure --prefix=/usr --without-xml2 --disable-shared
 make
 make install
 ```
 
-#### automake 1.16.5 
+### pkgconfig 2.3.0
 
- Prepare Automake for compilation:
-```
-./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.5
-```
-Compile and install the package:
-```
+```sh
+./configure --prefix=/usr              \
+            --with-internal-glib       \
+            --disable-host-tool        \
+            --docdir=/usr/share/doc/pkg-config-0.29.2
 make
 make install
 ```
+
+ # # # Pkgconf 2.1.1
+NOMORE !~~
+```
+./configure --prefix=/usr              \
+            --disable-static           \
+            --docdir=/usr/share/doc/pkgconf-2.1.1
+make
+make install
+```
+
 #### fakeroot 1.36
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
 # Don't install docs
 sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am
 
-./bootstrap
+# no more? ./bootstrap
 
 ./configure --prefix=/usr \
   --libdir=/usr/lib/libfakeroot \
@@ -181,27 +245,32 @@ sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am
 
 make
 make install
-
+```
+the following nomore needed?
+```sh
 install -dm0755 "/etc/ld.so.conf.d/"
 echo '/usr/lib/libfakeroot' > "/etc/ld.so.conf.d/fakeroot.conf"
 ```
-### OpenSSL 3.3.1 
 
-```
-./config --prefix=/usr         \
-         --openssldir=/etc/ssl \
-         --libdir=lib          \
-         shared                \
-         zlib-dynamic
-make
-sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
-make MANSUFFIX=ssl install
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.3.1
-```
 
-### Pacman 6.0.2
+### Pacman 7.0.0
 
+the cp is new?
 ```
+cp ../meson.pyz . 
+python3 meson.pyz --prefix=/usr                   \
+                  --buildtype=plain               \
+                  -Ddoc=disabled                  \
+                  -Ddoxygen=enabled               \
+                  -Dscriptlet-shell=/usr/bin/bash \
+                  -Dldconfig=/usr/bin/ldconfig    \
+build
+python3 meson.pyz compile -C build
+python3 meson.pyz install -C build
+rm ../meson.pyz
+```
+the old
+```sh
 PKG_CONFIG=pkgconf ./configure --prefix=/usr   \
             --disable-doc     \
             --disable-shared  \
@@ -215,7 +284,7 @@ This will have installed, amongst others, the `makepkg.conf` and `pacman.conf` c
 
 ```
 CARCH="x86_64"
-CHOST="x86_64-pc-linux-gnu"
+CHOST="x86_64-lfs-linux-gnu"
 ```
 
 You can set your name and email address as the `PACKAGER` if you want.
