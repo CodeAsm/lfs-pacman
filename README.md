@@ -185,7 +185,7 @@ make install
 install -dm0755 "/etc/ld.so.conf.d/"
 echo '/usr/lib/libfakeroot' > "/etc/ld.so.conf.d/fakeroot.conf"
 ```
-### OpenSSL 3.2.1 
+### OpenSSL 3.3.1 
 
 ```
 ./config --prefix=/usr         \
@@ -196,10 +196,10 @@ echo '/usr/lib/libfakeroot' > "/etc/ld.so.conf.d/fakeroot.conf"
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.2.1
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.3.1
 ```
 
-### Pacman 5.0.2
+### Pacman 6.0.2
 
 ```
 PKG_CONFIG=pkgconf ./configure --prefix=/usr   \
