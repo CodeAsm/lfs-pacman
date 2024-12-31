@@ -52,7 +52,8 @@ Pacman and to use makepkg later, they depend on the following packages:
     - meson 1.5.1
 - ninja 1.12.1
 - util-linux for getopt 2.40.2
-- shadow for su 4.16.0
+- libxcrypt-4.4.36
+    - shadow for su 4.16.0
 - fakeroot 1.36 
     - libcap 2.70
 - libarchive 3.7.4
@@ -149,7 +150,7 @@ cp meson.pyz ..
 mkdir -pv /var/lib/hwclock
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime    \
             --libdir=/usr/lib    \
-            --docdir=/usr/share/doc/util-linux-2.38.1 \
+            --docdir=/usr/share/doc/util-linux-2.40.2 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \
@@ -158,6 +159,7 @@ mkdir -pv /var/lib/hwclock
             --disable-runuser    \
             --disable-pylibmount \
             --disable-static     \
+            --disable-liblastlog2 \
             --without-python     \
             runstatedir=/run
 make
@@ -179,6 +181,19 @@ make test
 make prefix=/usr lib=lib install
 ```
 
+### libxcrypt-4.4.36 
+
+To be able to build su, we apparently DO need a function called crypt and its these days located in libxcrypt.
+
+```sh
+./configure --prefix=/usr \
+            --enable-hashes=strong,glibc \
+            --enable-obsolete-api=no     \
+            --disable-static             \
+            --disable-failure-tokens
+make
+make install
+```
 ### shadow 4.16.0 for su
 
 ```sh
@@ -186,15 +201,17 @@ sed -i 's/groups$(EXEEXT) //' src/Makefile.in
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
 find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
-./configure --sysconfdir=/etc \
-            --disable-static
+./configure --sysconfdir=/etc   \
+            --disable-static    \
+            --without-libbsd    \
+            --with-group-name-max-length=32
 make
 cp ./src/su /usr/bin/
-
 ```
 ### libarchive 3.7.4
 
 TODO: 
+Deze is van ShiroiBara
 ```sh
 sed '/linux\/fs\.h/d' -i libarchive/archive_read_disk_posix.c
 ./configure --prefix=/usr --disable-static
@@ -213,23 +230,16 @@ make install
 
 ```sh
 ./configure --prefix=/usr              \
-            --with-internal-glib       \
-            --disable-host-tool        \
-            --docdir=/usr/share/doc/pkg-config-0.29.2
+            --disable-static        \
+            --docdir=/usr/share/doc/pkgconf-2.3.0
 make
 make install
 ```
-
- # # # Pkgconf 2.1.1
-NOMORE !~~
+To maintain compatibility with the original Pkg-config create two symlinks
+```sh
+ln -sv pkgconf   /usr/bin/pkg-config
+ln -sv pkgconf.1 /usr/share/man/man1/pkg-config.1
 ```
-./configure --prefix=/usr              \
-            --disable-static           \
-            --docdir=/usr/share/doc/pkgconf-2.1.1
-make
-make install
-```
-
 #### fakeroot 1.36
 As part of its installation, fakeroot calls ldconfig, which is located in /tools/sbin. /tools/sbin is not part of our PATH, so we must add it now.
 ```
@@ -279,6 +289,7 @@ PKG_CONFIG=pkgconf ./configure --prefix=/usr   \
 make
 make install
 ```
+end old/
 
 This will have installed, amongst others, the `makepkg.conf` and `pacman.conf` config files in `/etc`; you may want to edit them. For `makepkg.conf`, be sure that `CARCH` and `CHOST` are appropriate, e.g.:
 

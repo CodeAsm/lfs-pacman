@@ -23,6 +23,7 @@ build() {
 		--disable-runuser    \
 		--disable-pylibmount \
 		--disable-static     \
+		--disable-liblastlog2 \
 		--without-python     \
 		--without-systemd    \
 		--without-systemdsystemunitdir
