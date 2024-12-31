@@ -210,23 +210,14 @@ cp ./src/su /usr/bin/
 ```
 ### libarchive 3.7.4
 
-TODO: 
-Deze is van ShiroiBara
 ```sh
 sed '/linux\/fs\.h/d' -i libarchive/archive_read_disk_posix.c
 ./configure --prefix=/usr --disable-static
 make
 make install
 ```
-or 
 
-```
-./configure --prefix=/usr --without-xml2 --disable-shared
-make
-make install
-```
-
-### pkgconfig 2.3.0
+### pkgconf 2.3.0
 
 ```sh
 ./configure --prefix=/usr              \
@@ -246,8 +237,6 @@ As part of its installation, fakeroot calls ldconfig, which is located in /tools
 # Don't install docs
 sed -i 's/SUBDIRS=doc \(.*\)/SUBDIRS=\1/' Makefile.am
 
-# no more? ./bootstrap
-
 ./configure --prefix=/usr \
   --libdir=/usr/lib/libfakeroot \
   --disable-static \
@@ -265,33 +254,23 @@ echo '/usr/lib/libfakeroot' > "/etc/ld.so.conf.d/fakeroot.conf"
 
 ### Pacman 7.0.0
 
-the cp is new?
+In the following command, the meson file needs a target directory, thats ``build`` in our case.
+this bit me already once.
+
 ```
 cp ../meson.pyz . 
-python3 meson.pyz --prefix=/usr                   \
+python3 meson.pyz setup --prefix=/usr             \
                   --buildtype=plain               \
                   -Ddoc=disabled                  \
                   -Ddoxygen=enabled               \
                   -Dscriptlet-shell=/usr/bin/bash \
                   -Dldconfig=/usr/bin/ldconfig    \
-build
+                  build
 python3 meson.pyz compile -C build
 python3 meson.pyz install -C build
 rm ../meson.pyz
 ```
-the old
-```sh
-PKG_CONFIG=pkgconf ./configure --prefix=/usr   \
-            --disable-doc     \
-            --disable-shared  \
-            --sysconfdir=/etc \
-            --localstatedir=/var
-make
-make install
-```
-end old/
-
-This will have installed, amongst others, the `makepkg.conf` and `pacman.conf` config files in `/etc`; you may want to edit them. For `makepkg.conf`, be sure that `CARCH` and `CHOST` are appropriate, e.g.:
+This will have installed, amongst others, the `makepkg.conf` and `pacman.conf` config files in `/etc`; you may want to edit them. For `makepkg.conf`, be sure that `CARCH` and `CHOST` are appropriate. You may want to build vim from the next step.
 
 ```
 CARCH="x86_64"
@@ -333,7 +312,7 @@ Create a home directory:
 mkdir -v /home/lfs
 chown -Rv lfs:users /home/lfs
 ```
-
+(after the next step, before chroot into lfs, ive decided to make another backup)
 Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `lfs` are set to the proper values for your system):
 
 ```
