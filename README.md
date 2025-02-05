@@ -279,6 +279,14 @@ CHOST="x86_64-lfs-linux-gnu"
 
 You can set your name and email address as the `PACKAGER` if you want.
 
+For default makepkg using options such striping debug symbols keeping static libraries empty directories and compress man files. Also it removes some info files like .pod. Some of those change not compatible with lfs and should be changed. Edit lines in makepkg.conf file to achive it:
+
+```sh
+OPTIONS=(strip !libtool !staticlibs !zipman purge)
+PURGE_TARGETS=(usr/{,share}/info/dir .packlist)
+```
+If you desire you can change them for you own use. Refer to ``makepkg.conf`` (manual)[https://man.archlinux.org/man/makepkg.conf.5.en].
+
 ### Vim (or any text editor)
 
 We wont bother testing VIM as this is just to our temporary tools and it'll be recompiled later.
@@ -312,7 +320,8 @@ Create a home directory:
 mkdir -v /home/lfs
 chown -Rv lfs:users /home/lfs
 ```
-(after the next step, before chroot into lfs, ive decided to make another backup)
+*(after the next step, before chroot into lfs, ive decided to make another backup. dont forget to mount the things again!)*
+
 Exit your current chroot, then chroot into your new user (make sure `1000`, `999` and `lfs` are set to the proper values for your system):
 
 ```
@@ -337,7 +346,19 @@ mkdir -v builds
 
 Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
 
+*(Testing)*
+Extract the pacman sources into the builds directory:
+```sh
+tar -xvf /sources/pacman-7.0.0.tar.xz
+cp /sources/meson.pyz pacman-7.0.0/
+```
+
 Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files/pacman-5.0.2) to the build directory.
+
+```sh
+cp -rf /sources/pacman/install-files/pacman-7.0.0/* .
+```
+
 
 The included PKGBUILD has had the following edits made:
 
