@@ -353,7 +353,7 @@ tar -xvf /sources/pacman-7.0.0.tar.xz
 cp /sources/meson.pyz pacman-7.0.0/
 ```
 
-Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf.x86_64`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files/pacman-5.0.2) to the build directory.
+Download the necessary build files (`PKGBUILD`, `makepkg.conf` and `pacman.conf`) from the [Install-Files](https://github.com/mssxtn/lfs-pacman/tree/master/install-files/pacman-5.0.2) to the build directory.
 
 ```sh
 cp -rf /sources/pacman/install-files/pacman-7.0.0/* .
@@ -367,16 +367,21 @@ The included PKGBUILD has had the following edits made:
 * Removed 'check' section as most of the tests will fail with our current environment
 * Added the PKG_CONFIG=pkgconf flag to find the newer pkg config tool
 
+The default pacman.conf is overwritten by our altered version. Signature checking is done on files, not on databases. Additionally, color output is enabled, and like in later versions of pacman, simultaneous downloads are set to 5.
+
 Now run the following command as your non-root user from the build directory:
 
 ```
 makepkg
 ```
 
-If all goes well, this should have created a file that you can now install as follows, as root this time (thus, logout, use the chroot command like you would in 7.4. Entering the Chroot Environment):
+If all goes well, this should have created a file that you can now install as follows, as root this time (thus, logout, use the chroot command like you would in [Section 7.4, “Entering the Chroot Environment”](https://linuxfromscratch.org/lfs/view/stable-systemd/chapter07/chroot.html)):
 
+newer pacman doesnt just overwrite files, so we must for now force it.
 ```
-pacman -U pacman-5.0.2-2-x86_64.pkg.tar.gz
+pacman -U --overwrite '*' pacman-7.0.0-1-x86_64.pkg.tar.gz
+mv /etc/makepkg.conf.pacnew /etc/makepkg.conf
+mv /etc/pacman.conf.pacnew /etc/pacman.conf
 ```
 
 Before starting with stage 3, you left the LFS book at **7.13. Cleaning up and Saving the Temporary System**
