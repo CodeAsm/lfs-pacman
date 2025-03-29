@@ -413,6 +413,18 @@ Writing a `PKGBUILD` file can take some trial and error. Essentially you'll need
 
 If you're stuck, check the [official Arch Linux packages](https://www.archlinux.org/packages/) or the`PKGBUILD` files in the `packages` directory of this repo.
 
+### chroot lfs
+
+as a reminder:
+```
+chroot --userspec=1000:999 "$LFS" /bin/env -i \
+     HOME=/home/lfs     \
+     TERM="$TERM"       \
+     PS1='(lfs chroot) \u:\w\$ ' \
+     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+     /bin/bash --login +h
+```
+
 ### Tips
 
 #### Source directory
