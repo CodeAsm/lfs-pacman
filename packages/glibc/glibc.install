@@ -16,6 +16,7 @@ post_install() {
     localedef -i it_IT -f ISO-8859-1 it_IT
     localedef -i it_IT -f UTF-8 it_IT.UTF-8
     localedef -i ja_JP -f EUC-JP ja_JP
+    localedef -i nl_NL -f UTF-8 nl_NL.UTF-8
     localedef -i ru_RU -f KOI8-R ru_RU.KOI8-R
     localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
     localedef -i tr_TR -f UTF-8 tr_TR.UTF-8

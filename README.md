@@ -468,6 +468,13 @@ The book wants you to create some symlinks; I did that manually, as I felt it wo
 
 The tzdata part of glibc requires `zic` to be installed to the system, which means after glibc was installed with `pacman -U`. While I suppose you could directly call the `zic` binary residing in the `src` or `pkg` directories, I thought it would be cleaner to split the tzdata installation to a separate package, much [like Arch Linux does](https://www.archlinux.org/packages/core/any/tzdata/).
 
+Because files exist, add the overwrite argument:
+```sh
+--overwrite '*'
+```
+I wont suggest you use this regularly tho, it may and will break your system
+
+
 #### 6.10. Adjusting the Toolchain
 
 I did these steps manually. It didn't feel suitable to (ab)use `makepkg`/`pacman` for this purpose.

@@ -1,5 +1,5 @@
 pkgname=glibc
-pkgver=2.26
+pkgver=2.40
 pkgrel=1
 pkgdesc="GNU C Library"
 arch=('x86_64')
@@ -7,14 +7,18 @@ url="http://www.gnu.org/software/libc"
 license=('GPL', 'LGPL')
 backup=(etc/ld.so.conf)
 source=(${pkgname}-${pkgver}.tar.xz
-	glibc-2.26-fhs-1.patch
+	glibc-2.40-fhs-1.patch
 	nsswitch.conf
 	ld.so.conf)
+sha256sums=('19a890175e9263d748f627993de6f4b1af9cd21e03f080e4bfb3a1fac10205a2'
+            '643552db030e2f2d7ffde4f558e0f5f83d3fabf34a2e0e56ebdb49750ac27b0d'
+            '25b7973e937137c5af3fa477589d3929f1a09a229aeaba3c8a6e82e21b3b21bb'
+            'a82b292e33d499a65c4946e3635b7765bc60631a68245d76370f35eea33322db')
 install=glibc.install
 
 prepare() {
     cd "${pkgname}-${pkgver}"
-    patch -Np1 -i ../glibc-2.26-fhs-1.patch
+    patch -Np1 -i ../${pkgname}-${pkgver}-fhs-1.patch
 }
 
 build() {
