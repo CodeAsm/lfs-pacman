@@ -1,11 +1,12 @@
 pkgname=man-pages
-pkgver=6.06
+pkgver=6.9.1
 pkgrel=1
 pkgdesc="Linux man pages"
 arch=('x86_64')
 url="http://man7.org/linux/man-pages/index.html"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('e23cbac29f110ba571f0da8523e79d373691466ed7f2a31301721817d34530bd')
 
 prepare() {
     cd "${pkgname}-${pkgver}"
