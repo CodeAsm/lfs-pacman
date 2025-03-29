@@ -377,16 +377,17 @@ makepkg
 
 If all goes well, this should have created a file that you can now install as follows, as root this time (thus, logout, use the chroot command like you would in [Section 7.4, “Entering the Chroot Environment”](https://linuxfromscratch.org/lfs/view/stable-systemd/chapter07/chroot.html)):
 
-newer pacman doesnt just overwrite files, so we must for now force it.
+newer pacman doesnt just overwrite files, so we must for now force it. ive also overwritten the "old" configs with our package new ones, unless you 
 ```
 pacman -U --overwrite '*' pacman-7.0.0-1-x86_64.pkg.tar.gz
 mv /etc/makepkg.conf.pacnew /etc/makepkg.conf
 mv /etc/pacman.conf.pacnew /etc/pacman.conf
 ```
 
-Before starting with stage 3, you left the LFS book at **7.13. Cleaning up and Saving the Temporary System**
-Continue from there
+Before starting with stage 3, you left the LFS book right before **[7.13. Cleaning up and Saving the Temporary System](https://linuxfromscratch.org/lfs/view/stable-systemd/chapter07/cleanup.html)**
+as either chroot lfs or chroot root user continue from there, clean up and I suggest
  - backup your tools
+ - save and backup your notes and customized configurations
 
 Come back after you have read **8.2. Package Management**
 
@@ -400,12 +401,13 @@ All of the necessary `PKGBUILD` files can be found in the `packages` directory, 
 
 The general process goes like this:
 
+As the dedicated lfs user:
 1. Create a new directory in the builds directory.
 2. Copy all needed files to it (source archive, possibly other files like patches or config files).
 3. Write a `PKGBUILD` file.
-4. Run `makepkg --skipchecksums`.
+4. Run `makepkg`. (we have OpenSSL right? no  --skipchecksums)
 5. Check the contents of the `pkg` directory; this is what pacman will install, so you may want to verify that it looks good.
-6. Install the package (as root) with `pacman -U $filename`
+6. Install the package (as root, from a seperate terminal maybe) with `pacman -U $filename`
 
 Writing a `PKGBUILD` file can take some trial and error. Essentially you'll need to copy what the LFS book wants you to do and paste it in the `PKGBUILD` at the right place, but usually you will not be able to copy things verbatim from the book.
 
