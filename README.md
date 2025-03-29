@@ -462,12 +462,18 @@ Pacman will execute the functions in the `.install` file at the end of the insta
 
 Some packages require additional steps besides simply converting the LFS instructions into a  `PKGBUILD`. These steps are documented here.
 
-#### 6.9. Glibc-2.39
+#### 8.5. Glibc-2.40
 
 The book wants you to create some symlinks; I did that manually, as I felt it would be out of place in the package.
 
 The tzdata part of glibc requires `zic` to be installed to the system, which means after glibc was installed with `pacman -U`. While I suppose you could directly call the `zic` binary residing in the `src` or `pkg` directories, I thought it would be cleaner to split the tzdata installation to a separate package, much [like Arch Linux does](https://www.archlinux.org/packages/core/any/tzdata/).
 
+Because files exist, add the overwrite argument:
+```sh
+--overwrite '*'
+```
+I wont suggest you use this regularly tho, it may and will break your system
+#### 8.6. Zlib
 Because files exist, add the overwrite argument:
 ```sh
 --overwrite '*'
