@@ -407,13 +407,13 @@ As the dedicated lfs user:
 3. Write a `PKGBUILD` file.
 4. Run `makepkg`. (we have OpenSSL right? no  --skipchecksums)
 5. Check the contents of the `pkg` directory; this is what pacman will install, so you may want to verify that it looks good.
-6. Install the package (as root, from a seperate terminal maybe) with `pacman -U $filename`
+6. Install the package (as root chroot(!), from a seperate terminal maybe) with `pacman -U $filename`
 
 Writing a `PKGBUILD` file can take some trial and error. Essentially you'll need to copy what the LFS book wants you to do and paste it in the `PKGBUILD` at the right place, but usually you will not be able to copy things verbatim from the book.
 
 If you're stuck, check the [official Arch Linux packages](https://www.archlinux.org/packages/) or the`PKGBUILD` files in the `packages` directory of this repo.
 
-### chroot lfs
+### chroot lfs/root
 
 as a reminder:
 ```
@@ -423,6 +423,19 @@ chroot --userspec=1000:999 "$LFS" /bin/env -i \
      PS1='(lfs chroot) \u:\w\$ ' \
      PATH=/bin:/usr/bin:/sbin:/usr/sbin \
      /bin/bash --login +h
+```
+
+and root:
+
+```sh
+chroot "$LFS" /usr/bin/env -i   \
+    HOME=/root                  \
+    TERM="$TERM"                \
+    PS1='(lfs chroot) \u:\w\$ ' \
+    PATH=/usr/bin:/usr/sbin     \
+    MAKEFLAGS="-j$(nproc)"      \
+    TESTSUITEFLAGS="-j$(nproc)" \
+    /bin/bash --login
 ```
 
 ### Tips
