@@ -1,0 +1,24 @@
+pkgname=lz4
+pkgver=1.10.0
+pkgrel=1
+pkgdesc="Extremely fast compression algorithm"
+arch=("x86_64")
+url="https://github.com/lz4/lz4"
+license=("BSD")
+source=("${pkgname}-${pkgver}.tar.gz")
+sha256sums=("537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b")
+
+build() {
+  cd "lz4-${pkgver}"
+  make BUILD_STATIC=no PREFIX=/usr
+}
+
+check() {
+  cd "lz4-${pkgver}"
+  make -j1 test 2>&1 | tee ${pkgname}-${pkgver}-check-log
+}
+
+package() {
+  cd "lz4-${pkgver}"
+  make BUILD_STATIC=no PREFIX="${pkgdir}/usr" install
+}
