@@ -30,17 +30,14 @@ build() {
 package() {
     cd "${pkgname}-${pkgver}"
     make PREFIX=${pkgdir}/usr install
-
-    install -vdm755 ${pkgdir}/bin
-    install -vdm755 ${pkgdir}/lib
-    install -vdm755 ${pkgdir}/usr/lib
-
-    install -vm755 bzip2-shared ${pkgdir}/bin/bzip2
-    cp -av libbz2.so.${pkgver} ${pkgdir}/lib
-    ln -sv ../../lib/libbz2.so.${pkgver} ${pkgdir}/usr/lib/libbz2.so
-    rm -v ${pkgdir}/usr/bin/{bunzip2,bzcat,bzip2}
-    ln -sv bzip2 ${pkgdir}/bin/bunzip2
-    ln -sv bzip2 ${pkgdir}/bin/bzcat
     
+    cp -av libbz2.so.*      $pkgdir/usr/lib
+    ln -sv libbz2.so.1.0.8  $pkgdir/usr/lib/libbz2.so
+    cp -v bzip2-shared      $pkgdir/usr/bin/bzip2
+    for i in $pkgdir/usr/bin/{bzcat,bunzip2}; do
+      ln -sfv bzip2 $i
+    done
+
     rm -fv ${pkgdir}/usr/lib/libbz2.a
+
 }
