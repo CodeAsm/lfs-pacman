@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc="Extremely fast compression algorithm"
 arch=("x86_64")
 url="https://github.com/lz4/lz4"
-license=("BSD")
+license=("BSD GPL2")
 source=("${pkgname}-${pkgver}.tar.gz")
 sha256sums=("537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b")
 
