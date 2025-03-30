@@ -1,11 +1,12 @@
 pkgname=xz
-pkgver=5.2.3
+pkgver=5.6.2
 pkgrel=1
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
 url="http://tukaani.org/xz/"
 license=('custom' 'gpl' 'LGPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('a9db3bb3d64e248a0fae963f8fb6ba851a26ba1822e504dc0efd18a80c626caf')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -23,11 +24,4 @@ check() {
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
-
-    install -vdm755 ${pkgdir}/bin
-    install -vdm755 ${pkgdir}/lib
-    install -vdm755 ${pkgdir}/usr/lib
-    mv -v ${pkgdir}/usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/lib/liblzma.so.* ${pkgdir}/lib
-    ln -svf ../../lib/$(readlink ${pkgdir}/usr/lib/liblzma.so) ${pkgdir}/usr/lib/liblzma.so
 }
