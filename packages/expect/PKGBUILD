@@ -1,0 +1,49 @@
+pkgname=expect
+pkgver=5.45.4
+pkgrel=1
+pkgdesc="A tool for automating interactive applications"
+arch=('x86_64')
+url="https://www.nist.gov/el/msid/expect.cfm"
+source=($pkgname$pkgver.tar.gz
+        $pkgname-$pkgver-gcc14-1.patch)
+sha256sums=('49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34'
+            '517c0cdd5db949cdd99dfa38b7a6c3945e1524c50e3467028973298f2c76a92c')
+license=('custom' 'PublicDomain')
+
+prepare() {
+
+    cd "$srcdir/$pkgname$pkgver"
+    if ! python3 -c 'from pty import spawn; spawn(["echo", "ok"])'; then
+        echo "Error: Unable to spawn enough pty. Exiting." >&2
+        exit 1
+    fi
+
+    patch -Np1 -i ../${pkgname}-${pkgver}-gcc14-1.patch
+}
+
+build() {
+
+    cd "$srcdir/$pkgname$pkgver"
+    ./configure --prefix=/usr           \
+    --with-tcl=/usr/lib     \
+    --enable-shared         \
+    --disable-rpath         \
+    --mandir=/usr/share/man \
+    --with-tclinclude=/usr/include
+    make
+    
+}
+
+check() {
+
+    cd "$srcdir/$pkgname$pkgver" 
+     make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+}
+
+package() {
+
+    cd "$srcdir/$pkgname$pkgver"
+    make DESTDIR=$pkgdir install
+    ln -svf $pkgname$pkgver/lib$pkgname$pkgver.so $pkgdir/usr/lib
+    
+}
