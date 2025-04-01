@@ -1,0 +1,71 @@
+pkgname=tcl
+pkgver=8.6.14
+pkgrel=1
+pkgdesc="Powerful, easy-to-learn dynamic programming language"
+arch=('x86_64')
+url="http://tcl.sourceforge.net"
+source=($pkgname$pkgver-src.tar.gz
+$pkgname$pkgver-html.tar.gz)
+sha256sums=('5880225babf7954c58d4fb0f5cf6279104ce1cd6aa9b71e9a6322540e1c4de66'
+            'bfd319033beeeead986f46be0a3a3ef6ee35424770f7836dca45bbc0ba27ee5f')
+license=('custom')
+
+prepare() {
+
+    cd "$srcdir"
+    mkdir build
+    cd build
+    tar xf ../$pkgname$pkgver-src.tar.gz
+    cd $pkgname$pkgver
+    tar xf ../../$pkgname$pkgver-html.tar.gz --strip-components=1
+
+}
+
+build() {
+
+    cd "$srcdir/build/$pkgname$pkgver"
+    SRCDIR=$(pwd)
+    cd unix
+    ./configure --prefix=/usr           \
+    --mandir=/usr/share/man \
+    --disable-rpath
+    make
+    sed -e "s|$SRCDIR/unix|/usr/lib|" \
+    -e "s|$SRCDIR|/usr/include|"  \
+    -i tclConfig.sh
+
+    sed -e "s|$SRCDIR/unix/pkgs/tdbc1.1.7|/usr/lib/tdbc1.1.7|" \
+        -e "s|$SRCDIR/pkgs/tdbc1.1.7/generic|/usr/include|"    \
+        -e "s|$SRCDIR/pkgs/tdbc1.1.7/library|/usr/lib/tcl8.6|" \
+        -e "s|$SRCDIR/pkgs/tdbc1.1.7|/usr/include|"            \
+        -i pkgs/tdbc1.1.7/tdbcConfig.sh
+
+    sed -e "s|$SRCDIR/unix/pkgs/itcl4.2.4|/usr/lib/itcl4.2.4|" \
+        -e "s|$SRCDIR/pkgs/itcl4.2.4/generic|/usr/include|"    \
+        -e "s|$SRCDIR/pkgs/itcl4.2.4|/usr/include|"            \
+        -i pkgs/itcl4.2.4/itclConfig.sh
+
+    unset SRCDIR
+
+}
+
+check() {
+
+    cd "$srcdir/build/$pkgname$pkgver/unix" 
+    make test check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+}
+
+package() {
+
+    cd "$srcdir/build/$pkgname$pkgver/unix"
+    make DESTDIR=$pkgdir install
+
+    chmod -v u+w $pkgdir/usr/lib/libtcl8.6.so
+    make DESTDIR=$pkgdir install-private-headers
+    ln -sfv tclsh8.6 $pkgdir/usr/bin/tclsh
+    mv $pkgdir/usr/share/man/man3/{Thread,Tcl_Thread}.3
+
+    install -vdm755 $pkgdir/usr/share/doc/tcl-$pkgver
+    cp -v -r  ../html/* $pkgdir/usr/share/doc/tcl-$pkgver
+    
+}
