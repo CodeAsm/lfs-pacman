@@ -1,18 +1,19 @@
 pkgname=mpfr
-pkgver=3.1.5
+pkgver=4.2.1
 pkgrel=1
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')
 url="http://www.mpfr.org/"
 license=('LGPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2')
 
 build() {
     cd "${pkgname}-${pkgver}"
     ./configure --prefix=/usr        \
 		--disable-static     \
 		--enable-thread-safe \
-		--docdir=/usr/share/doc/mpfr-3.1.5
+		--docdir=/usr/share/doc/${pkgname}-${pkgver}
     make
     make html
 }
@@ -20,6 +21,9 @@ build() {
 check() {
     cd "${pkgname}-${pkgver}"
     make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    awk '/# PASS:/{total+=$3} ; END{print total}' ${pkgname}-${pkgver}-check-log
+    echo "Ensure that at least 198 tests in the test suite passed"
+    read -p "Please check test results and press any key to continue... " -n1 -s
 }
 
 package() {
