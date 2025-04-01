@@ -1,36 +1,43 @@
 pkgname=binutils
-pkgver=2.29
+pkgver=2.43.1
 pkgrel=1
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
-backup=()
-source=(${pkgname}-${pkgver}.tar.bz2)
+source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('13f74202a3c4c51118b797a39ea4200d3f6cfbe224da6d1d95bb938480132dfd')
 
 build() {
-    cd "${pkgname}-${pkgver}"
+    cd "$pkgname-$pkgver"
 
     mkdir -v build
     cd build
 
     ../configure --prefix=/usr       \
-		 --enable-gold       \
-		 --enable-ld=default \
-		 --enable-plugins    \
-		 --enable-shared     \
-		 --disable-werror    \
-		 --with-system-zlib
+         --sysconfdir=/etc           \
+		 --enable-gold               \
+		 --enable-ld=default         \
+		 --enable-plugins            \
+		 --enable-shared             \
+		 --disable-werror            \
+         --enable-64-bit-bfd         \
+         --enable-new-dtags          \
+		 --with-system-zlib          \
+         --enable-default-hash-style=gnu
 
     make tooldir=/usr
 }
 
 check() {
-   cd "${pkgname}-${pkgver}/build"
-   make -k check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+
+    cd "$pkgname-$pkgver/build"
+    make -k check || true
+    read -p "Please check test results and press any key to continue... " -n1 -s
 }
 
 package() {
-    cd "${pkgname}-${pkgver}/build"
-    make prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+    cd "$pkgname-$pkgver/build"
+    make DESTDIR=$pkgdir tooldir=/usr install
+    rm -fv ${pkgdir}/usr/lib/lib{bfd,ctf,ctf-nobfd,gprofng,opcodes,sframe}.a
 }
