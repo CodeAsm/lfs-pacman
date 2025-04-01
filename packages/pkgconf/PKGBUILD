@@ -1,0 +1,26 @@
+pkgname=pkgconf
+pkgver=2.3.0
+pkgrel=1
+pkgdesc="A tool for managing include and library paths during package builds"
+arch=('x86_64')
+url="http://pkgconf.org/"
+license=('custom')
+source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('3a9080ac51d03615e7c1910a0a2a8df08424892b5f13b0628a204d3fcce0ea8b')
+
+build() {
+    cd "${pkgname}-${pkgver}"
+    ./configure --prefix=/usr \
+        --disable-static    \
+        --docdir=/usr/share/doc/pkgconf-${pkgver}
+
+    make
+}
+
+package() {
+    cd "${pkgname}-${pkgver}"
+    make DESTDIR=${pkgdir} install
+
+    ln -sv pkgconf ${pkgdir}/usr/bin/pkg-config
+    ln -sv pkgconf.1 ${pkgdir}/usr/share/man/man1/pkg-config.1
+}
