@@ -1,11 +1,12 @@
 pkgname=shadow
-pkgver=4.5
+pkgver=4.16.0
 pkgrel=1
 pkgdesc="Password and account management tool suite with support for shadow files and PAM"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
 license=('BSD')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('b78e3921a95d53282a38e90628880624736bf6235e36eea50c50835f59a3530b')
 install=shadow.install
 
 prepare() {
@@ -16,22 +17,29 @@ prepare() {
     find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
     find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
 
-    sed -i -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' \
-	-e 's@/var/spool/mail@/var/mail@' etc/login.defs
+   sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD YESCRYPT:' \
+    -e 's:/var/spool/mail:/var/mail:'                   \
+    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
+    -i etc/login.defs
 
-    sed -i 's/1000/999/' etc/useradd
 }
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --sysconfdir=/etc --with-group-name-max-length=32
+    ./configure --sysconfdir=/etc       \
+                --disable-static        \
+                --with-bcrypt           \
+                --with-yescrypt         \
+                --without-libbsd        \
+                --with-group-name-max-length=32
     make
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
-    make DESTDIR=${pkgdir} install
 
-    install -vdm755 ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/passwd ${pkgdir}/bin
+    install -vdm755 $pkgdir/usr/bin
+    touch $pkgdir/usr/bin/passwd
+    make DESTDIR=$pkgdir exec_prefix=/usr install
+    make DESTDIR=$pkgdir -C man install-man
 }

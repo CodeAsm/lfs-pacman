@@ -473,31 +473,37 @@ Because files exist, add the overwrite argument:
 --overwrite '*'
 ```
 I wont suggest you use this regularly tho, it may and will break your system
-#### 8.6. Zlib
+#### 8.6. Zlib, and more
 Because files exist, add the overwrite argument:
 ```sh
 --overwrite '*'
 ```
 I wont suggest you use this regularly tho, it may and will break your system
 
+for the following (and 1 previous) packages, this might be needed aswell:
+- glibc
+- zlib
+- bzip2
+- xz
+- file
+- m4
+- pkgconf
+- binutils
+- libcap
+- libxcrypt
+- shadow
+- 
 
-#### 6.10. Adjusting the Toolchain
+#### 8.28. Shadow-4.16.0
 
-I did these steps manually. It didn't feel suitable to (ab)use `makepkg`/`pacman` for this purpose.
-
-#### 6.15. Bc-6.7.5
-
-The book wants you to create symlinks for libncurses. I did this manually before building the package.
+run ``passwd root`` now. 
+Ive tried adding a chroot or non interactive envirement check, might work. if not, run this command manually.
 
 #### 6.20. GCC-13.2.0
 
 Before building the package, increase the stack size: `ulimit -s 32768`.
 
 I had to use `--force` when installing this package, since some libraries already existed on the system.
-
-#### 6.28. Shadow-4.14.5
-
-I ran `passwd` manually.
 
 #### 6.4. Bash-5.2.21
 

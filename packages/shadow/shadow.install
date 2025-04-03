@@ -1,4 +1,22 @@
 post_install() {
     pwconv
     grpconv
+
+    mkdir -p /etc/default
+    useradd -D --gid 999
+
+    # Check if we're running in an interactive shell
+    if ! tty -s || ! grep -qE "(init|systemd|upstart)" /proc/1/cmdline; then
+        echo "Automated or chroot installation detected. Skipping root password setup."
+        echo "Please run 'passwd root' after installation."
+    else
+        echo "#####################################"
+        echo "#  Root account setup required!    #"
+        echo "#####################################"
+        echo ""
+        echo "You must set a root password before using the system."
+        echo "Please enter a new root password now."
+        passwd root
+    fi
+
 }
