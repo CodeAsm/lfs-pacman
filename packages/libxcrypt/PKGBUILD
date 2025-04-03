@@ -1,0 +1,29 @@
+pkgname=libxcrypt
+pkgver=4.4.36
+pkgrel=1
+pkgdesc="A modern library for one-way hashing of passwords. "
+url="https://github.com/besser82/libxcrypt"
+arch=('x86_64')
+license=('LGPL')
+source=("${pkgname}-${pkgver}.tar.xz")
+sha256sums=('e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943')
+
+build() {
+    cd "${pkgname}-${pkgver}"
+    ./configure --prefix=/usr                \
+            --enable-hashes=strong,glibc     \
+            --enable-obsolete-api=no         \
+            --disable-static                 \
+            --disable-failure-tokens
+    make
+}
+
+check() {
+    cd "${pkgname}-${pkgver}"
+    make test 2>&1 | tee ${pkgname}-${pkgver}-check-log
+}
+
+package() {
+    cd "${pkgname}-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}
