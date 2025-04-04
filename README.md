@@ -492,18 +492,20 @@ for the following (and 1 previous) packages, this might be needed aswell:
 - libcap
 - libxcrypt
 - shadow
-- 
+- gcc
 
 #### 8.28. Shadow-4.16.0
 
 run ``passwd root`` now. 
 Ive tried adding a chroot or non interactive envirement check, might work. if not, run this command manually.
 
-#### 6.20. GCC-13.2.0
+#### 8.29. GCC-14.2.0
 
-Before building the package, increase the stack size: `ulimit -s 32768`.
-
-I had to use `--force` when installing this package, since some libraries already existed on the system.
+the stack size these days in host distro's is set pretty large, unlimited. if thats not the case on yours, it wont hurt to run:
+```
+ulimit -s -H unlimited
+```
+But ive already done so in the package build. you might need that overwrite command again upon installing if using the tools.
 
 #### 6.4. Bash-5.2.21
 
