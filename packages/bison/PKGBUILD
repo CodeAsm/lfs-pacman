@@ -1,16 +1,24 @@
 pkgname=bison
-pkgver=3.0.4
+pkgver=3.8.2
 pkgrel=1
 pkgdesc="The GNU general-purpose parser generator"
 arch=('x86_64')
 url="http://www.gnu.org/software/bison/bison.html"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr --docdir=/usr/share/doc/bison-${pkgver}
+    ./configure --prefix=/usr \
+    --docdir=/usr/share/doc/bison-${pkgver}
     make
+}
+
+check() {
+    cd "${pkgname}-${pkgver}"
+    # this takes an additional 5.5 SBU
+    # make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
