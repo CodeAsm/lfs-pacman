@@ -1,22 +1,17 @@
 pkgname=sed
-pkgver=4.4
+pkgver=4.9
 pkgrel=1
 pkgdesc="GNU stream editor"
 arch=('x86_64')
 url="https://www.gnu.org/software/sed/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('6e226b732e1cd739464ad6862bd1a1aba42d7982922da7a53519631d24975181')
 
-prepare() {
-    cd "${pkgname}-${pkgver}"
-    sed -i 's/usr/tools/'                 build-aux/help2man
-    sed -i 's/testsuite.panic-tests.sh//' Makefile.in
-
-}
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr --bindir=/bin
+    ./configure --prefix=/usr
 
     make
     make html
@@ -30,6 +25,6 @@ check() {
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
-    install -vdm755             ${pkgdir}/usr/share/doc/sed-4.4
-    install -vm644 doc/sed.html ${pkgdir}/usr/share/doc/sed-4.4
+    install -vdm755             ${pkgdir}/usr/share/doc/sed-${pkgver}
+    install -vm644 doc/sed.html ${pkgdir}/usr/share/doc/sed-${pkgver}
 }
