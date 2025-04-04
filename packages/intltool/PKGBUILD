@@ -6,6 +6,7 @@ arch=('x86_64')
 url="https://launchpad.net/intltool"
 license=('GPl')
 source=(${pkgname}-${pkgver}.tar.gz)
+sha256sums=('67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd')
 
 prepare() {
     cd "${pkgname}-${pkgver}"
