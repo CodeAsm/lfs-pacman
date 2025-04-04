@@ -1,15 +1,19 @@
 pkgname=inetutils
-pkgver=1.9.4
+pkgver=2.5
 pkgrel=1
 pkgdesc="A collection of common network programs"
 arch=('x86_64')
 url="http://www.gnu.org/software/inetutils/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('87697d60a31e10b5cb86a9f0651e1ec7bee98320d048c0739431aac3d5764fb6')
 
 build() {
     cd "${pkgname}-${pkgver}"
+    sed -i 's/def HAVE_TERMCAP_TGETENT/ 1/' telnet/telnet.c
+
     ./configure --prefix=/usr        \
+        --bindir=/usr/bin    \
 		--localstatedir=/var \
 		--disable-logger     \
 		--disable-whois      \
@@ -30,8 +34,6 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
 
-    install -vdm755 ${pkgdir}/bin
-    install -vdm755 ${pkgdir}/sbin
-    mv -v ${pkgdir}/usr/bin/{hostname,ping,ping6,traceroute} ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/ifconfig ${pkgdir}/sbin
+    install -vdm755 ${pkgdir}/usr/sbin
+    mv -v ${pkgdir}/usr/bin/ifconfig ${pkgdir}/usr/sbin/ifconfig
 }
