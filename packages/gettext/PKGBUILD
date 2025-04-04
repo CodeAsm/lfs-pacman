@@ -1,17 +1,12 @@
 pkgname=gettext
-pkgver=0.19.8.1
+pkgver=0.22.5
 pkgrel=1
 pkgdesc="GNU internationalization library"
 arch=('x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
-
-prepare() {
-    cd "${pkgname}-${pkgver}"
-    sed -i '/^TESTS =/d' gettext-runtime/tests/Makefile.in
-    sed -i 's/test-lock..EXEEXT.//' gettext-tools/gnulib-tests/Makefile.in
-}
+sha256sums=('fe10c37353213d78a5b83d48af231e005c4da84db5ce88037d88355938259640')
 
 build() {
     cd "${pkgname}-${pkgver}"
