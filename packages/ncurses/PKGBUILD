@@ -1,26 +1,23 @@
 pkgname=ncurses
-pkgver=6.0
+pkgver=6.5
 pkgrel=1
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('x86_64')
 url="http://invisible-island.net/ncurses/ncurses.html"
 license=('MIT')
 source=(${pkgname}-${pkgver}.tar.gz)
-
-prepare() {
-    cd "${pkgname}-${pkgver}"
-    sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
-}
+sha256sums=('136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr           \
+    ./configure --prefix=/usr   \
 		--mandir=/usr/share/man \
 		--with-shared           \
 		--without-debug         \
 		--without-normal        \
+        --with-cxx-shared       \
 		--enable-pc-files       \
-		--enable-widec
+		--with-pkg-config-libdir=/usr/lib/pkgconfig
     make
 }
 
@@ -28,20 +25,21 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
 
-    install -vdm755 ${pkgdir}/lib
-    mv -v ${pkgdir}/usr/lib/libncursesw.so.6* ${pkgdir}/lib
-    ln -sfv ../../lib/$(readlink ${pkgdir}/usr/lib/libncursesw.so) ${pkgdir}/usr/lib/libncursesw.so
+    install -vdm755 ${pkgdir}/usr/lib
+   
+    sed -e 's/^#if.*XOPEN.*$/#if 1/' \
+        -i "$pkgdir/usr/include/curses.h"
+
 
     for lib in ncurses form panel menu ; do
-	rm -vf                    ${pkgdir}/usr/lib/lib${lib}.so
-	echo "INPUT(-l${lib}w)" > ${pkgdir}/usr/lib/lib${lib}.so
-	ln -sfv ${lib}w.pc        ${pkgdir}/usr/lib/pkgconfig/${lib}.pc
+        ln -sfv lib${lib}w.so $pkgdir/usr/lib/lib${lib}.so
+        ln -sfv ${lib}w.pc    $pkgdir/usr/lib/pkgconfig/${lib}.pc
     done
 
-    rm -vf                      ${pkgdir}/usr/lib/libcursesw.so
-    echo "INPUT(-lncursesw)" >  ${pkgdir}/usr/lib/libcursesw.so
-    ln -sfv libncurses.so       ${pkgdir}/usr/lib/libcurses.so
 
-    install -vdm755 ${pkgdir}/usr/share/doc/ncurses-6.0
-    cp -vR doc/*    ${pkgdir}/usr/share/doc/ncurses-6.0
+    ln -sfv libncursesw.so $pkgdir/usr/lib/libcurses.so
+
+    install -vdm755 ${pkgdir}/usr/share/doc/${pkgname}-${pkgver}
+    cp -vR doc/*    ${pkgdir}/usr/share/doc/${pkgname}-${pkgver}
+
 }
