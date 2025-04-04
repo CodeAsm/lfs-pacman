@@ -1,11 +1,12 @@
 pkgname=perl
-pkgver=5.26.0
+pkgver=5.40.0
 pkgrel=1
 pkgdesc="A highly capable, feature-rich programming language"
 arch=('x86_64')
 url="http://www.perl.org/"
 license=('GPL' 'PerlArtistic')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('d5325300ad267624cb0b7d512cfdfcd74fa7fe00c455c5b51a6bd53e5e199ef9')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -15,11 +16,17 @@ build() {
 
     sh Configure -des -Dprefix=/usr                 \
                       -Dvendorprefix=/usr           \
-		      -Dman1dir=/usr/share/man/man1 \
+                      -D privlib=/usr/lib/perl5/5.40/core_perl      \
+                      -D archlib=/usr/lib/perl5/5.40/core_perl      \
+                      -D sitelib=/usr/lib/perl5/5.40/site_perl      \
+                      -D sitearch=/usr/lib/perl5/5.40/site_perl     \
+                      -D vendorlib=/usr/lib/perl5/5.40/vendor_perl  \
+                      -D vendorarch=/usr/lib/perl5/5.40/vendor_perl \
+		              -Dman1dir=/usr/share/man/man1 \
                       -Dman3dir=/usr/share/man/man3 \
                       -Dpager="/usr/bin/less -isR"  \
                       -Duseshrplib                  \
-		      -Dusethreads
+		              -Dusethreads
     make
 
     unset BUILD_ZLIB BUILD_BZIP2
@@ -27,7 +34,7 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make -k test 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    make test_harness 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
