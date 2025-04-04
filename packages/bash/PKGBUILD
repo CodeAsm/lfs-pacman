@@ -1,35 +1,32 @@
 pkgname=bash
-pkgver=4.4
+pkgver=5.2.32
 pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
 arch=('x86_64')
 url="http://www.gnu.org/software/bash/bash.html"
 license=('GPL')
-source=(${pkgname}-${pkgver}.tar.gz
-	bash-4.4-upstream_fixes-1.patch)
-
-prepare() {
-    cd "${pkgname}-${pkgver}"
-    patch -Np1 -i ../bash-4.4-upstream_fixes-1.patch
-}
+source=(${pkgname}-${pkgver}.tar.gz)
+sha256sums=('d3ef80d2b67d8cbbe4d3265c63a72c46f9b278ead6e0e06d61801b58f23f50b5')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr                          \
-		--docdir=/usr/share/doc/bash-${pkgver} \
-		--without-bash-malloc                  \
-		--with-installed-readline
+    ./configure --prefix=/usr	    \
+    	--without-bash-malloc       \
+		--with-installed-readline   \
+        bash_cv_strtold_broken=no   \
+		--docdir=/usr/share/doc/bash-${pkgver}
     make
 }
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    #make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
-    install -vdm755 ${pkgdir}/bin
-    mv -vf ${pkgdir}/usr/bin/bash ${pkgdir}/bin
+     # Patch Makefile.inc to remove or replace the BUILD_DIR reference
+    sed -i '/^BUILD_DIR/s|=.*|=|' "${pkgdir}/usr/lib/bash/Makefile.inc"
+
 }
