@@ -495,7 +495,7 @@ for the following (and 1 previous) packages, this might be needed aswell:
 - gcc
 - sed
 - gettext
-- 
+- bison
 
 #### 8.28. Shadow-4.16.0
 
