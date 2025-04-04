@@ -6,10 +6,12 @@ arch=('x86_64')
 url="http://www.gnu.org/software/gperf/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.gz)
+sha256sums=('588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-${pkgver}
+    ./configure --prefix=/usr \
+    --docdir=/usr/share/doc/gperf-${pkgver}
     make
 }
 
