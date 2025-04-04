@@ -496,6 +496,8 @@ for the following (and 1 previous) packages, this might be needed aswell:
 - sed
 - gettext
 - bison
+- grep
+- 
 
 #### 8.28. Shadow-4.16.0
 
