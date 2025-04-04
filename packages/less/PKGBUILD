@@ -1,16 +1,22 @@
 pkgname=less
-pkgver=487
+pkgver=661
 pkgrel=1
 pkgdesc="A terminal based program for viewing text files"
 arch=('x86_64')
 url="http://www.greenwoodsoftware.com/less"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.gz)
+sha256sums=('2b5f0167216e3ef0ffcb0c31c374e287eb035e4e223d5dae315c2783b6e738ed')
 
 build() {
     cd "${pkgname}-${pkgver}"
     ./configure --prefix=/usr --sysconfdir=/etc
     make
+}
+
+check() {
+    cd "${pkgname}-${pkgver}"
+    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
