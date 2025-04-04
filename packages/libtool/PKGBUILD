@@ -1,11 +1,12 @@
 pkgname=libtool
-pkgver=2.4.6
+pkgver=2.4.7
 pkgrel=1
 pkgdesc="A generic library support script"
 arch=('x86_64')
 url="http://www.gnu.org/software/libtool"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('4f7f217f057ce655ff22559ad221a0fd8ef84ad1fc5fcb6990cecc333aa1635d')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -15,10 +16,13 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    make -k check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
+
+    # Remove static libraries
+    rm -fv ${pkgdir}/usr/lib/libltdl.a
 }
