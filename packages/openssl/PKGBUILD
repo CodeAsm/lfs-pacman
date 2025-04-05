@@ -1,0 +1,37 @@
+pkgname=openssl
+pkgver=3.3.1
+pkgrel=1
+pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
+arch=('x86_64')
+url="https://www.openssl.org"
+source=($pkgname-$pkgver.tar.gz)
+sha256sums=('777cd596284c883375a2a7a11bf5d2786fc5413255efab20c50d6ffe6d020b7e')
+license=('custom' 'BSD')
+
+build() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    ./config --prefix=/usr         \
+         --openssldir=/etc/ssl \
+         --libdir=lib          \
+         shared                \
+         zlib-dynamic
+    make
+
+}
+
+check() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    #HARNESS_JOBS=$(nproc) make test 2>&1 | tee ${pkgname}-${pkgver}-check-log
+}
+
+package() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+    make DESTDIR=$pkgdir MANSUFFIX=ssl install
+    mv -v $pkgdir/usr/share/doc/openssl $pkgdir/usr/share/doc/openssl-$pkgver
+    cp -vfr doc/* $pkgdir/usr/share/doc/openssl-$pkgver
+
+}
