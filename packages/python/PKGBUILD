@@ -1,0 +1,54 @@
+pkgname=python
+archive=Python
+pkgver=3.12.5
+pkgrel=1
+pkgdesc="Next generation of the python high-level scripting language"
+arch=('x86_64')
+url="https://www.python.org/"
+source=($archive-$pkgver.tar.xz
+$pkgname-$pkgver-docs-html.tar.bz2
+"pip.conf")
+sha256sums=('fa8a2e12c5e620b09f53e65bcd87550d2e5a1e2e04bf8ba991dcc55113876397'
+            'f698f4e5972fa985f3c1c5c9fdcee835632e5745630ec2437ac7b5ff573e36c7'
+            'fb7d5f9aa1326aa088b03c71dfa578d9b4aa537224a17ec17929e45b440b1e61')
+license=('MIT')
+backup=('etc/pip.conf')
+
+
+build() {
+
+    cd "$srcdir/$archive-$pkgver"
+    ./configure --prefix=/usr        \
+    --enable-shared      \
+    --with-system-expat  \
+    --enable-optimizations
+    make
+
+}
+
+check() {
+
+    cd "$srcdir/$archive-$pkgver"
+    make test TESTOPTS="--timeout 120"
+}
+
+package() {
+
+    cd "$srcdir/$archive-$pkgver"
+    make DESTDIR=$pkgdir install
+    install -v -dm755 "$pkgdir/usr/share/doc/python-$pkgver/html"
+    tar --strip-components=1  \
+    --no-same-owner       \
+    --no-same-permissions \
+    -C $pkgdir/usr/share/doc/python-$pkgver/html \
+    -xvf "$srcdir/$pkgname-$pkgver-docs-html.tar.bz2"
+    # Fixing broken symlinks. Thanks to arch linux community
+    ln -s python3               "${pkgdir}"/usr/bin/python
+    ln -s python3-config        "${pkgdir}"/usr/bin/python-config
+    ln -s idle3                 "${pkgdir}"/usr/bin/idle
+    ln -s pydoc3                "${pkgdir}"/usr/bin/pydoc
+
+    install -Dm644 "$srcdir/pip.conf" "$pkgdir/etc/pip.conf"
+
+
+}
