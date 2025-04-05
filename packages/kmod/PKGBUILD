@@ -1,20 +1,22 @@
 pkgname=kmod
-pkgver=24
+pkgver=33
 pkgrel=1
 pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
 url="http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
 license=('GPL2')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('dc768b3155172091f56dc69430b5481f2d76ecd9ccb54ead8c2540dbcf5ea9bc')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr          \
-		--bindir=/bin          \
+    ./configure --prefix=/usr  \
 		--sysconfdir=/etc      \
-		--with-rootlibdir=/lib \
-		--with-xz              \
-		--with-zlib
+        --with-openssl         \
+        --with-xz              \
+		--with-zstd            \
+		--with-zlib            \
+        --disable-manpages         
     make
 }
 
@@ -22,11 +24,11 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
 
-    install -vdm755 ${pkgdir}/sbin
-    install -vdm755 ${pkgdir}/bin
-    for target in depmod insmod lsmod modinfo modprobe rmmod; do
-	ln -sfv ../bin/kmod ${pkgdir}/sbin/$target
+    install -vdm755 ${pkgdir}/usr/sbin
+    for target in depmod insmod modinfo modprobe rmmod; do
+	    ln -sfv ../bin/kmod ${pkgdir}/usr/sbin/$target
+        rm -fv ${pkgdir}/usr/bin/$target
     done
 
-    ln -sfv kmod ${pkgdir}/bin/lsmod
+    #ln -sfv kmod ${pkgdir}/usr/bin/lsmod
 }
