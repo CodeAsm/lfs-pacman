@@ -1,11 +1,12 @@
 pkgname=automake
-pkgver=1.15.1
+pkgver=1.17
 pkgrel=1
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('x86_64')
 url="http://www.gnu.org/software/automake"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('8920c1fc411e13b90bf704ef9db6f29d540e76d232cb3b2c9f4dc4cc599bd990')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -15,8 +16,7 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    sed -i "s:./configure:LEXLIB=/usr/lib/libfl.a &:" t/lex-{clean,depend}-cxx.sh
-    make -j4 check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    make -j$(($(nproc)>4?$(nproc):4)) check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
