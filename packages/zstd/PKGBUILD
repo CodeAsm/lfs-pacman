@@ -23,6 +23,6 @@ check() {
 package() {
 
     cd "${pkgname}-${pkgver}"
-    make DESTDIR=$"pkgdir" prefix=/usr install
-    
+    make DESTDIR="${pkgdir}" prefix=/usr install
+
 }
