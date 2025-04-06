@@ -519,6 +519,10 @@ ulimit -s -H unlimited
 ```
 But ive already done so in the package build. you might need that overwrite command again upon installing if using the tools.
 
+### 8.64. GRUB-2.12
+
+You still have to run the grub install commands if you wish to use grub. Ive enabled the efi parts aswell. efibootmgr might intrest you.
+
 #### 6.4. Bash-5.2.21
 
 When creating the package, `makepkg` told me that "Package contains reference to $srcdir". Using `grep -R "$(pwd)/src" pkg/`, I found out that Bash installs `Makefile.inc` to `/usr/lib/bash/`, which contains a reference to the build directory. On an existing Arch Linux installation, `/usr/lib/bash/Makefile.inc` also contained a reference to a (non-existing) build directory, so I assume this is benign.

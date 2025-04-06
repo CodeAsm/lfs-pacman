@@ -1,18 +1,25 @@
 pkgname=grub
-pkgver=2.02
+pkgver=2.12
 pkgrel=1
 pkgdesc="GNU GRand Unified Bootloader (2)"
 arch=('x86_64')
 url="https://www.gnu.org/software/grub/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('f3c97391f7c4eaa677a78e090c7e97e6dc47b16f655f04683ebd37bef7fe0faa')
+
+prepare() {
+    cd "${pkgname}-${pkgver}"
+    echo "depends bli part_gpt" > grub-core/extra_deps.lst
+    }
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr          \
-		--sbindir=/sbin        \
-		--sysconfdir=/etc      \
-		--disable-efiemu       \
+    ./configure --prefix=/usr   \
+		--sysconfdir=/etc       \
+		--disable-efiemu        \
+        --with-platform=efi     \
+        --target=x86_64         \
 		--disable-werror
     make
 }
@@ -20,4 +27,7 @@ build() {
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
+    install -d "${pkgdir}/usr/share/bash-completion/completions"
+    mv -v "${pkgdir}/etc/bash_completion.d/grub" "${pkgdir}/usr/share/bash-completion/completions/"
+    rm -rv "${pkgdir}/etc/bash_completion.d"
 }
