@@ -1,0 +1,31 @@
+pkgname=check
+pkgver=0.15.2
+pkgrel=1
+pkgdesc="A unit testing framework for C"
+arch=('x86_64')
+url="https://www.gnu.org/software/coreutils/"
+source=($pkgname-$pkgver.tar.gz)
+sha256sums=('a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a')
+license=('LGPL')
+
+build() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    ./configure --prefix=/usr --disable-static
+    make
+
+}
+
+check() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+
+}
+
+package() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    make DESTDIR=$pkgdir docdir=/usr/share/doc/check-$pkgver install
+
+}
