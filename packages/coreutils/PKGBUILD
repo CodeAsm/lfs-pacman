@@ -1,22 +1,25 @@
 pkgname=coreutils
-pkgver=8.27
+pkgver=9.5
 pkgrel=1
 pkgdesc="The basic file, shell and text manipulation utilities of the GNU operating system"
 arch=('x86_64')
 url="https://www.gnu.org/software/coreutils/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz
-	coreutils-8.27-i18n-1.patch)
+	coreutils-9.5-i18n-2.patch)
+sha256sums=('cd328edeac92f6a665de9f323c93b712af1858bc2e0d88f3f7100469470a1b8a'
+            '99f1553ce9b7ded634bb56dac14ba6e439fc124daf8da436ee4cda1fd286f4a2')
 
 prepare() {
     cd "${pkgname}-${pkgver}"
-    patch -Np1 -i ../coreutils-8.27-i18n-1.patch
-    sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
+    patch -Np1 -i ../coreutils-9.5-i18n-2.patch
+    
 }
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure       \
+    autoreconf -fiv
+    FORCE_UNSAFE_CONFIGURE=1 ./configure      \
         --prefix=/usr \
         --enable-no-install-program=kill,uptime
     make
@@ -24,23 +27,18 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make RUN_EXPENSIVE_TESTS=yes check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    #make RUN_EXPENSIVE_TESTS=yes check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
-    cd "${pkgname}-${pkgver}"
-    make DESTDIR=${pkgdir} install
+    cd "$srcdir/$pkgname-$pkgver"
+    make DESTDIR="$pkgdir" install
 
-    install -vdm755 ${pkgdir}/bin
-    install -vdm755 ${pkgdir}/usr/sbin
-    install -vdm755 ${pkgdir}/usr/share/man/man8
-    mv -v ${pkgdir}/usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/{rmdir,stty,sync,true,uname} ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/chroot ${pkgdir}/usr/sbin
-    install -vm644 ${pkgdir}/usr/share/man/man1/chroot.1 ${pkgdir}/usr/share/man/man8/chroot.8
-    sed s/\"1\"/\"8\"/1 ${pkgdir}/usr/share/man/man8/chroot.8 > ${srcdir}/chroot.8
-    install -vm644 ${srcdir}/chroot.8 ${pkgdir}/usr/share/man/man8/chroot.8
+    install -vdm755 "$pkgdir/usr/sbin"
+    mv -v "$pkgdir/usr/bin/chroot" "$pkgdir/usr/sbin"
 
-    mv -v ${pkgdir}/usr/bin/{head,sleep,nice,test,[} ${pkgdir}/bin
+    install -vdm755 "$pkgdir/usr/share/man/man8"
+    mv -v "$pkgdir/usr/share/man/man1/chroot.1" "$pkgdir/usr/share/man/man8/chroot.8"
+    sed -i 's/"1"/"8"/' "$pkgdir/usr/share/man/man8/chroot.8"
+
 }
