@@ -1,11 +1,12 @@
 pkgname=diffutils
-pkgver=3.6
+pkgver=3.10
 pkgrel=1
 pkgdesc="Utility programs used for creating patch files"
 arch=('x86_64')
 url="https://www.gnu.org/software/diffutils"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('90e5e93cc724e4ebe12ede80df1634063c7a855692685919bfe60b556c9bd09e')
 
 build() {
     cd "${pkgname}-${pkgver}"
