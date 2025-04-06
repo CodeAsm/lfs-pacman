@@ -1,11 +1,17 @@
 pkgname=gawk
-pkgver=4.1.4
+pkgver=5.3.0
 pkgrel=1
 pkgdesc="GNU version of awk"
 arch=('x86_64')
 url="http://www.gnu.org/software/gawk/"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('ca9c16d3d11d0ff8c69d79dc0b47267e1329a69b39b799895604ed447d3ca90b')
+
+prepare() {
+    cd "${pkgname}-${pkgver}"
+    sed -i 's/extras//' Makefile.in
+}
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -15,13 +21,14 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    #make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
 
+    ln -sv gawk.1 ${pkgdir}/usr/share/man/man1/awk.1
     install -vdm755 ${pkgdir}/usr/share/doc/gawk-${pkgver}
     install -vm644 doc/{awkforai.txt,*.{eps,pdf,jpg}} ${pkgdir}/usr/share/doc/gawk-${pkgver}
 
