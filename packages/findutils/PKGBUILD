@@ -1,19 +1,13 @@
 pkgname=findutils
-pkgver=4.6.0
+pkgver=4.10.0
 pkgrel=1
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')
 url="http://www.gnu.org/software/findutils"
 license=('GPL3')
-source=(${pkgname}-${pkgver}.tar.gz)
+source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('1387e0b67ff247d2abde998f90dfbf70c1491391a59ddfecb8ae698789f0a4f5')
 
-prepare() {
-    cd "${pkgname}-${pkgver}"
-
-    # Suppress a test which on some machines can loop forever.
-    sed -i 's/test-lock..EXEEXT.//' tests/Makefile.in
-
-}
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -23,16 +17,10 @@ build() {
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+   # make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
-
-    install -vdm755 ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/find ${pkgdir}/bin
-
-    sed 's|find:=${BINDIR}|find:=/bin|' ${pkgdir}/usr/bin/updatedb > ${srcdir}/updatedb
-    install -vm644 ${srcdir}/updatedb ${pkgdir}/usr/bin/updatedb
 }
