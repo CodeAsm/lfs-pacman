@@ -1,28 +1,31 @@
 pkgname=iproute2
-pkgver=4.12.0
+pkgver=6.10.0
 pkgrel=1
 pkgdesc="IP Routing Utilities"
 arch=('x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2"
 license=('GPL2')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('91a62f82737b44905a00fa803369c447d549e914e9a2a4018fdd75b1d54e8dce')
 
 prepare() {
     cd "${pkgname}-${pkgver}"
 
     sed -i /ARPD/d Makefile
-    sed -i 's/arpd.8//' man/man8/Makefile
-    rm -v doc/arpd.sgml
-
-    sed -i 's/m_ipt.o//' tc/Makefile
+    rm -fv man/man8/arpd.8
 }
 
 build() {
     cd "${pkgname}-${pkgver}"
-    make
+    make NETNS_RUN_DIR=/run/netns
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
-    make DESTDIR=${pkgdir} DOCDIR=/usr/share/doc/iproute2-${pkgver} install
+    make DESTDIR=${pkgdir} SBINDIR=/usr/sbin install
+
+    mkdir -pv             ${pkgdir}/usr/share/doc/iproute2-${pkgver}
+    cp -v COPYING README* ${pkgdir}/usr/share/doc/iproute2-${pkgver}
+
+
 }
