@@ -1,11 +1,13 @@
 pkgname=gzip
-pkgver=1.8
+pkgver=1.13
 pkgrel=1
 pkgdesc="GNU compression utility"
 arch=('x86_64')
 url="http://www.gnu.org/software/gzip/"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('7454eb6935db17c6655576c2e1b0fabefd38b4d0936e0f87f48cd062ce91a057')
+
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -22,6 +24,4 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
 
-    install -vdm755 ${pkgdir}/bin
-    mv -v ${pkgdir}/usr/bin/gzip ${pkgdir}/bin
 }
