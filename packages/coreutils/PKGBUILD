@@ -41,4 +41,6 @@ package() {
     mv -v "$pkgdir/usr/share/man/man1/chroot.1" "$pkgdir/usr/share/man/man8/chroot.8"
     sed -i 's/"1"/"8"/' "$pkgdir/usr/share/man/man8/chroot.8"
 
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

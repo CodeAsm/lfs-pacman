@@ -23,4 +23,7 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
     make DESTDIR=${pkgdir} TEXMF=/usr/share/texmf install-tex
+
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

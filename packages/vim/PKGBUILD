@@ -42,4 +42,7 @@ package() {
 
     install -vdm755 ${pkgdir}/etc
     install -vm644 ${srcdir}/vimrc ${pkgdir}/etc/vimrc
+
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

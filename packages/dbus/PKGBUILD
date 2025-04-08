@@ -35,5 +35,7 @@ package() {
     mv $pkgdir/var/run $pkgdir/
     ln -sfv /etc/machine-id $pkgdir/var/lib/dbus
     rm -rf "$pkgdir/run"
-
+    
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

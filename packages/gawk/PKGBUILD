@@ -32,4 +32,6 @@ package() {
     install -vdm755 ${pkgdir}/usr/share/doc/gawk-${pkgver}
     install -vm644 doc/{awkforai.txt,*.{eps,pdf,jpg}} ${pkgdir}/usr/share/doc/gawk-${pkgver}
 
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

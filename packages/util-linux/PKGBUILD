@@ -38,4 +38,7 @@ check() {
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
+
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

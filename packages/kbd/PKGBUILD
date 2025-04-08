@@ -36,4 +36,7 @@ package() {
 
     install -vdm755 ${pkgdir}/usr/share/doc/kbd-${pkgver}
     cp -Rv docs/doc/* ${pkgdir}/usr/share/doc/kbd-${pkgver}
+
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

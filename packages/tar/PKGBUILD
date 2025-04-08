@@ -24,4 +24,7 @@ package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
     make -C doc DESTDIR=${pkgdir} install-html docdir=/usr/share/doc/tar-${pkgver}
+
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

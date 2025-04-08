@@ -28,4 +28,6 @@ package() {
     cp -v COPYING README* ${pkgdir}/usr/share/doc/iproute2-${pkgver}
 
 
+    # change ownership
+    chown -R root:root "$pkgdir"
 }

@@ -40,4 +40,7 @@ package() {
     makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
     install -v -m644 doc/com_err.info ${pkgdir}/usr/share/info
     install-info --dir-file=${pkgdir}/usr/share/info/dir ${pkgdir}/usr/share/info/com_err.info
+ 
+    # change ownership
+    chown -R root:root "$pkgdir"
  }

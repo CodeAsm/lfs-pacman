@@ -560,8 +560,45 @@ chmod 755 /bin/fakeroot
 ```
 Possibly not an issue, my fakeroot package should install correctly.
 
+And previously other people said:
+```md
+When restarting my machine, the LFS system wouldn't boot properly. It turned out that many binaries and other files were owned by `ben`, the user with which I built the packages. I have no idea why that happened, but chowning them to `root:root` allowed my system to boot.
+```
+Ive figured, fakeroot would automaticly fix this but not if we copy files differently or whatever. I may have fixed it with:
+```sh
+# change ownership
+    chown -R root:root "$pkgdir"
+```
+in the following packages:
+- check
+- coreutils
+- dbus
+- diffutils
+- e2fsprogs
+- findutils
+- gawk
+- groff
+- grub
+- gzip
+- iproute2
+- kbd
+- libarchive
+- libpipeline
+- make
+- man-db
+- patch
+- procps-ng
+- tar
+- texinfo
+- vim
+
+I "fixed" it. hopefully this is the way. else, we need to fix the PKGBUILDs
+
 ## Stage 5 - Finishing the book
 
 Finish up the rest of the book manually.
+you probably need to go to:
+``8.82. About Debugging Symbols``
+but stripping would best be done from the PKGBUILDs already.
 
-When restarting my machine, the LFS system wouldn't boot properly. It turned out that many binaries and other files were owned by `ben`, the user with which I built the packages. I have no idea why that happened, but chowning them to `root:root` allowed my system to boot.
+

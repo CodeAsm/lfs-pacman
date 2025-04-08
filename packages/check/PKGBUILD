@@ -27,5 +27,8 @@ package() {
 
     cd "$srcdir/$pkgname-$pkgver"
     make DESTDIR=$pkgdir docdir=/usr/share/doc/check-$pkgver install
+    
+    # change ownership
+    chown -R root:root "$pkgdir"
 
 }

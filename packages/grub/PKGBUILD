@@ -30,4 +30,7 @@ package() {
     install -d "${pkgdir}/usr/share/bash-completion/completions"
     mv -v "${pkgdir}/etc/bash_completion.d/grub" "${pkgdir}/usr/share/bash-completion/completions/"
     rm -rv "${pkgdir}/etc/bash_completion.d"
-}
+
+    # change ownership
+    chown -R root:root "$pkgdir"
+    }
