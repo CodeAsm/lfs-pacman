@@ -1,11 +1,12 @@
 pkgname=man-db
-pkgver=2.7.6.1
+pkgver=2.12.1
 pkgrel=1
 pkgdesc="A utility for reading man pages"
 arch=('x86_64')
 url="http://www.nongnu.org/man-db/"
 license=('GPL' 'LGPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('ddee249daeb78cf92bab794ccd069cc8b575992265ea20e239e887156e880265')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -16,8 +17,7 @@ build() {
 		--enable-cache-owner=bin             \
 		--with-browser=/usr/bin/lynx         \
 		--with-vgrind=/usr/bin/vgrind        \
-		--with-grap=/usr/bin/grap            \
-		--with-systemdtmpfilesdir=
+		--with-grap=/usr/bin/grap
     make
 }
 
