@@ -523,37 +523,17 @@ ulimit -s -H unlimited
 ```
 But ive already done so in the package build. you might need that overwrite command again upon installing if using the tools.
 
-### 8.64. GRUB-2.12
+#### 8.36. Bash-5.2.32
+
+I re-chrooted, using `/bin/bash` instead of `/tools/bin/bash`.
+
+#### 8.64. GRUB-2.12
 
 You still have to run the grub install commands if you wish to use grub. Ive enabled the efi parts aswell. efibootmgr might intrest you.
 
-#### 6.4. Bash-5.2.21
+#### 8.76. Systemd-256.4
 
-When creating the package, `makepkg` told me that "Package contains reference to $srcdir". Using `grep -R "$(pwd)/src" pkg/`, I found out that Bash installs `Makefile.inc` to `/usr/lib/bash/`, which contains a reference to the build directory. On an existing Arch Linux installation, `/usr/lib/bash/Makefile.inc` also contained a reference to a (non-existing) build directory, so I assume this is benign.
-
-Use `--force` to install this package, since `/bin/bash` was created as part of **7.6. Creating Essential Files and Symlinks**.
-
-I then re-chrooted, using `/bin/bash` instead of `/tools/bin/bash`.
-
-#### 7.9. Perl-5.38.2
-
-The LFS book tells you to create `/etc/hosts`. I've chosen to do this manually, rather than to have the Perl package install this file. It doesn't sound right that Perl should own this file. For reference, in Arch Linux, the hosts file is owned by the `filesystem` package, which contains the base Arch Linux files, so it makes sense that this is created manually in the case of LFS.
-
-Use `--force` to install this package, since `/usr/bin/perl` was created as part of **6.6. Creating Essential Files and Symlinks**.
-
-#### 6.5. Coreutils-9.4
-
-For some reason, doing the in place `sed` (`sed -i`) on `chroot.8` resulted in the file having 000 permissions. I replaced it with a regular `sed`, redirecting the result to a new file, then using `install` to copy the file to its destination.
-
-Use `--force` to install this package, since a number of files already exist (amongst others `cat`, `dd`, `echo`) in `/bin` (as symlinks to `/tools`). These were added in **6.6. Creating Essential Files and Symlinks**.
-
-#### 6.8. Findutils-4.9.0
-
-As with coreutils, using in place `sed` set the permissions to 000, so I used the same workaround here.
-
-#### 6.63. Sysklogd-1.5.1 << ??? >>
-
-Sysklogd's makefile doesn't support specifying a destination directory when installing (`make DESTDIR=/path`). I've included a patch that adds this.
+Ive decided to not set the name in os-release, we arent testing systemd here anyway. Lets move this together with the hosts file (that also nolonger is set by perl) to a new package that will generally prep the system. same for timezone settings that appear not to be required anymore to be set.
 
 ## Stage 4 - Installing pacman to your final system
 

@@ -1,0 +1,63 @@
+pkgname=systemd
+pkgver=256.4
+pkgrel=1
+pkgdesc="System and service manager"
+arch=('x86_64')
+url="https://www.github.com/systemd/systemd"
+source=($pkgname-$pkgver.tar.gz
+systemd-man-pages-$pkgver.tar.xz)
+sha256sums=('7861d544190f938cac1b242624d78c96fe2ebbc7b72f86166e88b50451c6fa58'
+            'dceb4cc699b3801c38d99f88618ca7e7f7e23ee6016a8b7eef3ed361d852d340')
+license=('GPL2' 'LGPL2.1')
+install=systemd.install
+
+prepare() {
+
+    cd "${pkgname}-${pkgver}"
+    sed -i -e 's/GROUP="render"/GROUP="video"/' \
+           -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+}
+
+build() {
+
+    cd "${pkgname}-${pkgver}"
+
+    mkdir -p build
+    cd       build
+
+    meson   setup .. \
+            --prefix=/usr                 \
+            --buildtype=release           \
+            -D default-dnssec=no          \
+            -D firstboot=false            \
+            -D install-tests=false        \
+            -D ldconfig=false             \
+            -D sysusers=false             \
+            -D rpmmacrosdir=no            \
+            -D homed=disabled             \
+            -D userdb=false               \
+            -D man=disabled               \
+            -D mode=release               \
+            -D pamconfdir=no              \
+            -D dev-kvm-mode=0660          \
+            -D nobody-group=nogroup       \
+            -D sysupdate=disabled         \
+            -D docdir=/usr/share/doc/systemd-$pkgver
+    
+    jobs=${MAKEFLAGS#*-j}
+    jobs=${jobs%%[!0-9]*}
+    jobs=${jobs:-6}
+    ninja -j"$jobs"
+
+}
+
+package() {
+
+     cd "${pkgname}-${pkgver}"/build
+    DESTDIR=$pkgdir ninja install
+    install -vdm755 $pkgdir/usr/share/man
+    tar -xf ../../../systemd-man-pages-$pkgver.tar.xz \
+    --no-same-owner --strip-components=1   \
+    -C $pkgdir/usr/share/man
+
+}
