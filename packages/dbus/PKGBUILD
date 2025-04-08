@@ -1,0 +1,39 @@
+pkgname=dbus
+pkgver=1.14.10
+pkgrel=1
+pkgdesc="Freedesktop.org message bus system"
+arch=('x86_64')
+url="https://wiki.freedesktop.org/www/Software/dbus/"
+source=($pkgname-$pkgver.tar.xz)
+sha256sums=('ba1f21d2bd9d339da2d4aa8780c09df32fea87998b73da24f49ab9df1e36a50f')
+license=('GPL' 'custom')
+
+
+build() {
+
+    cd "$srcdir/$pkgname-$pkgver"
+    ./configure --prefix=/usr                    \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --runstatedir=/run                   \
+            --enable-user-session                \
+            --disable-static                     \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --docdir=/usr/share/doc/dbus-$pkgver \
+            --with-system-socket=/run/dbus/system_bus_socket
+    make
+
+}
+
+package() {
+
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+    # var/run is symlink to run. dbus package overwrite it and could
+    # broke it. Moving it to /run instead
+    mv $pkgdir/var/run $pkgdir/
+    ln -sfv /etc/machine-id $pkgdir/var/lib/dbus
+    rm -rf "$pkgdir/run"
+
+}
