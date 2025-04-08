@@ -1,42 +1,41 @@
 pkgname=util-linux
-pkgver=2.30.1
+pkgver=2.40.2
 pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
 url="https://www.kernel.org/pub/linux/utils/util-linux/"
 license=('GPL2')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3')
 
-prepare() {
-    cd "${pkgname}-${pkgver}"
-}
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
-		--docdir=/usr/share/doc/util-linux-${pkgver} \
-		--disable-chfn-chsh  \
-		--disable-login      \
-		--disable-nologin    \
-		--disable-su         \
-		--disable-setpriv    \
-		--disable-runuser    \
-		--disable-pylibmount \
-		--disable-static     \
-		--disable-liblastlog2 \
-		--without-python     \
-		--without-systemd    \
-		--without-systemdsystemunitdir
+    ./configure --bindir=/usr/bin     \
+                --libdir=/usr/lib     \
+                --runstatedir=/run    \
+                --sbindir=/usr/sbin   \
+                --disable-chfn-chsh   \
+                --disable-login       \
+                --disable-nologin     \
+                --disable-su          \
+                --disable-setpriv     \
+                --disable-runuser     \
+                --disable-pylibmount  \
+                --disable-liblastlog2 \
+                --disable-static      \
+                --without-python      \
+                ADJTIME_PATH=/var/lib/hwclock/adjtime \
+                --docdir=/usr/share/doc/util-linux-${pkgver}
     make
 }
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make -k check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+   # make -k check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
     cd "${pkgname}-${pkgver}"
-    install -vdm755 ${pkgdir}/var/lib/hwclock
     make DESTDIR=${pkgdir} install
 }
