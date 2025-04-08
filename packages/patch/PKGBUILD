@@ -1,11 +1,12 @@
 pkgname=patch
-pkgver=2.7.5
+pkgver=2.7.6
 pkgrel=1
 pkgdesc="A utility to apply patch files to original sources"
 arch=('x86_64')
 url="http://www.gnu.org/software/patch/patch.html"
 license=('GPL')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd')
 
 build() {
     cd "${pkgname}-${pkgver}"
