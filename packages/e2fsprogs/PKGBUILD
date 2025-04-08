@@ -1,11 +1,12 @@
 pkgname=e2fsprogs
-pkgver=1.43.5
+pkgver=1.47.1
 pkgrel=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('x86_64')
 url="http://e2fsprogs.sourceforge.net/"
 license=('GPL' 'LGPL' 'MIT')
 source=(${pkgname}-${pkgver}.tar.gz)
+sha256sums=('9afcd201f39429d2db2492aeb13dba5e75d6cc50682b732dca35643bd5f092e3')
 
 build() {
     cd "${pkgname}-${pkgver}"
@@ -13,36 +14,30 @@ build() {
     mkdir -v build
     cd build
 
-    LIBS=-L/tools/lib                    \
-    CFLAGS=-I/tools/include              \
-    PKG_CONFIG_PATH=/tools/lib/pkgconfig \
     ../configure --prefix=/usr           \
-                 --bindir=/bin           \
-		 --with-root-prefix=""   \
-		 --enable-elf-shlibs     \
-		 --disable-libblkid      \
-		 --disable-libuuid       \
-		 --disable-uuidd         \
-		 --disable-fsck
+                 --sysconfdir=/etc       \
+                 --enable-elf-shlibs     \
+                 --disable-libblkid      \
+                 --disable-libuuid       \
+                 --disable-uuidd         \
+                 --disable-fsck
 
     make
 }
 
 check() {
     cd "${pkgname}-${pkgver}/build"
-    make LD_LIBRARY_PATH=/tools/lib check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    make  check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
-    cd "${pkgname}-${pkgver}/build"
-    make DESTDIR=${pkgdir} install install-libs
+    cd ${pkgname}-${pkgver}/build
 
-     chmod -v u+w ${pkgdir}/usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+    make DESTDIR=${pkgdir} install
 
-     gunzip -v ${pkgdir}/usr/share/info/libext2fs.info.gz
-    install-info --dir-file=${pkgdir}/usr/share/info/dir ${pkgdir}/usr/share/info/libext2fs.info
-
-     makeinfo -o doc/com_err.info ../lib/et/com_err.texinfo
+    gunzip -v ${pkgdir}/usr/share/info/libext2fs.info.gz
+   
+    makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
     install -v -m644 doc/com_err.info ${pkgdir}/usr/share/info
     install-info --dir-file=${pkgdir}/usr/share/info/dir ${pkgdir}/usr/share/info/com_err.info
-}
+ }
