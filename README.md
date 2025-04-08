@@ -510,6 +510,9 @@ for the following (and 1 previous) packages, this might be needed aswell:
 - texinfo
 - vim
 - util-linux
+- libarchive
+- fakeroot
+- pacman
 
 #### 8.28. Shadow-4.16.0
 
@@ -547,6 +550,10 @@ As part of chapter six you should already have installed most of these packages,
 - pacman
 
 Use your temporary pacman installation to install them. Remember, we're installing to the final system, not to `/tools`.
+
+### libarchive
+### fakeroot
+### pacman
 
 ## Stage 5 - Finishing the book
 

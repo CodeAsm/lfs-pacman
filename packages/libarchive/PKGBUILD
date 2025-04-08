@@ -1,27 +1,25 @@
 pkgname=libarchive
-pkgver=3.3.2
+pkgver=3.7.4
 pkgrel=1
 pkgdesc="library that can create and read several streaming archive formats"
 arch=('x86_64')
 url="http://libarchive.org/"
 license=('BSD')
-source=(${pkgname}-${pkgver}.tar.gz)
+source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('f887755c434a736a609cbd28d87ddbfbe9d6a3bb5b703c22c02f6af80a802735')
 
-prepare() {
-    cd "${pkgname}-${pkgver}"
-}
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr  \
-		--without-xml2 \
-		--disable-static
+    ./configure --prefix=/usr   \
+		--disable-static        \
+        --without-expat
     make
 }
 
 check() {
     cd "${pkgname}-${pkgver}"
-    make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
+    LC_ALL=C.UTF-8 make check 2>&1 | tee ${pkgname}-${pkgver}-check-log
 }
 
 package() {
