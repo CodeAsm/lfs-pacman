@@ -1,16 +1,17 @@
 pkgname=tar
-pkgver=1.29
+pkgver=1.35
 pkgrel=1
 pkgdesc="Utility used to store, backup, and transport files"
 arch=('x86_64')
 url="https://www.gnu.org/software/tar/tar.html"
 license=('GPL3')
 source=(${pkgname}-${pkgver}.tar.xz)
+sha256sums=('4d62ff37342ec7aed748535323930c7cf94acf71c3591882b26a7ea50f3edc16')
 
 build() {
     cd "${pkgname}-${pkgver}"
-    ./configure --prefix=/usr \
-		--bindir=/bin
+
+    FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr 
     make
 }
 
@@ -22,5 +23,5 @@ check() {
 package() {
     cd "${pkgname}-${pkgver}"
     make DESTDIR=${pkgdir} install
-    make DESTDIR=${pkgdir} -C doc install-html docdir=/usr/share/doc/tar-${pkgver}
+    make -C doc DESTDIR=${pkgdir} install-html docdir=/usr/share/doc/tar-${pkgver}
 }
