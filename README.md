@@ -344,7 +344,7 @@ mkdir -v builds
 
 ## Stage 2 - Installing pacman with pacman
 
-Copy the pacman sources to its build directory, `~/builds/pacman-5.0.2`.
+Copy the pacman sources to its build directory, `~/builds/pacman-7.0.0`.
 
 *(Testing)*
 Extract the pacman sources into the builds directory:
@@ -550,6 +550,15 @@ As part of chapter six you should already have installed most of these packages,
 - pacman
 
 Use your temporary pacman installation to install them. Remember, we're installing to the final system, not to `/tools`.
+
+### fakeroot permision error when installing pacman
+
+Weirdly, maybe during earlier compilations and installing, fakeroot got the wrong permisions. issue the following from the root user:
+```sh
+chmod 755 /bin/faked
+chmod 755 /bin/fakeroot
+```
+Possibly not an issue, my fakeroot package should install correctly.
 
 ## Stage 5 - Finishing the book
 
