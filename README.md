@@ -551,10 +551,6 @@ As part of chapter six you should already have installed most of these packages,
 
 Use your temporary pacman installation to install them. Remember, we're installing to the final system, not to `/tools`.
 
-### libarchive
-### fakeroot
-### pacman
-
 ## Stage 5 - Finishing the book
 
 Finish up the rest of the book manually.
