@@ -531,6 +531,15 @@ But ive already done so in the package build. you might need that overwrite comm
 
 I re-chrooted, using `/bin/bash` instead of `/tools/bin/bash`.
 
+#### 8.54. Wheel-0.44.0
+
+this package seems to require LANG to be set, issue:
+```
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+```
+LC_ALL is for kdb, but its fine for now.
+
 #### 8.64. GRUB-2.12
 
 You still have to run the grub install commands if you wish to use grub. Ive enabled the efi parts aswell. efibootmgr might intrest you.
